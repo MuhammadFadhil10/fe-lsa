@@ -70,6 +70,7 @@ export const useExams = () => {
   );
 
   return {
+    user,
     memoizedExams,
     startExamError,
     createExamLoading,

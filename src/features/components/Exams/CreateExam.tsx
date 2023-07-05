@@ -1,10 +1,20 @@
 import { Exam, ExamQuestion, QuestionSection, useExams } from "@/features";
 import * as React from "react";
 import { Button, TextInput } from "../node";
-import { useForm } from "react-hook-form";
+import { useForm, FieldName } from "react-hook-form";
 
-export const CreateExam = React.memo(function CreateExam() {
-  const { register, handleSubmit } = useForm();
+interface Props {
+  defaultValues?: { [x: string]: any | undefined };
+}
+
+export const CreateExam = React.memo(function CreateExam({
+  defaultValues = {
+    duration: "60",
+  },
+}: Props) {
+  const { register, handleSubmit } = useForm({
+    defaultValues,
+  });
   const { handleCreateExams, createExamLoading } = useExams();
 
   const defaulQuestion: Partial<ExamQuestion> = React.useMemo(() => {
@@ -15,9 +25,9 @@ export const CreateExam = React.memo(function CreateExam() {
     };
   }, []);
 
-  const [questions, setQuestions] = React.useState<Partial<ExamQuestion>[]>([
-    defaulQuestion,
-  ]);
+  const [questions, setQuestions] = React.useState<Partial<ExamQuestion>[]>(
+    defaultValues?.questions ?? [defaulQuestion]
+  );
 
   return (
     <div className="border shadow-lg w-2/3 h-screen  overflow-auto pb-20">
