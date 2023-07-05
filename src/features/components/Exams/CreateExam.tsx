@@ -1,16 +1,9 @@
-import {
-  ExamQuestion,
-  QuestionForm,
-  QuestionSection,
-  useDashboard,
-} from "@/features";
+import { ExamQuestion, QuestionSection } from "@/features";
 import * as React from "react";
-import { Button, TextAreaInput, TextInput } from "../node";
+import { Button, TextInput } from "../node";
 import { useForm } from "react-hook-form";
 
 export const CreateExam = React.memo(function CreateExam() {
-  const { memoizedTeachersStudents } = useDashboard();
-
   const defaulQuestion: Partial<ExamQuestion> = React.useMemo(() => {
     return {
       question: "",

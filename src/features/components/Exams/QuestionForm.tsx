@@ -1,22 +1,18 @@
 import { ExamQuestion } from "@/features";
 import * as React from "react";
-import { Button } from "../node";
 
 interface Props {
   questionNumber: number;
   currentQuestion: Partial<ExamQuestion>;
   onChange: (data: Partial<ExamQuestion>) => void;
-  //   onQuestionSubmit: () => void;
 }
 
 export const QuestionForm = React.memo(function QuestionForm({
   questionNumber,
   currentQuestion,
   onChange,
-}: //   onQuestionSubmit,
-Props) {
+}: Props) {
   const [, setQuestion] = React.useState<Partial<ExamQuestion>>({
-    // _id: Date.now()
     question: "",
     answerKey: "",
     score: 0,
