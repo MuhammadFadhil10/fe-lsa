@@ -5,7 +5,7 @@ interface Props {
   label: string;
   register: UseFormRegister<FieldValues>;
   registerName: string;
-  defaultValues?: { [x: string]: unknown };
+  defaultValues?: unknown;
   placeholder?: string;
   required?: boolean;
 }

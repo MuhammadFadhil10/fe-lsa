@@ -1,9 +1,12 @@
-import { ExamQuestion, QuestionSection } from "@/features";
+import { Exam, ExamQuestion, QuestionSection, useExams } from "@/features";
 import * as React from "react";
 import { Button, TextInput } from "../node";
 import { useForm } from "react-hook-form";
 
 export const CreateExam = React.memo(function CreateExam() {
+  const { register, handleSubmit } = useForm();
+  const { handleCreateExams, createExamLoading } = useExams();
+
   const defaulQuestion: Partial<ExamQuestion> = React.useMemo(() => {
     return {
       question: "",
@@ -11,14 +14,13 @@ export const CreateExam = React.memo(function CreateExam() {
       score: 0,
     };
   }, []);
+
   const [questions, setQuestions] = React.useState<Partial<ExamQuestion>[]>([
     defaulQuestion,
   ]);
 
-  const { register, handleSubmit } = useForm();
-
   return (
-    <div className="border shadow-lg w-2/3 h-screen  ">
+    <div className="border shadow-lg w-2/3 h-screen  overflow-auto pb-20">
       {/* header */}
       <div className="w-full p-2 flex justify-between text-2xl border border-[3px] border-t-0 border-l-0 border-r-0">
         Buat Test
@@ -30,16 +32,28 @@ export const CreateExam = React.memo(function CreateExam() {
           onSubmit={handleSubmit((data, e) => {
             e?.preventDefault();
 
-            const payload = { ...data, questions };
+            const payload = {
+              ...data,
+              questions,
+              duration: (+data?.duration * 60).toString(),
+            };
 
-            alert(JSON.stringify(payload));
+            handleCreateExams(payload as Partial<Exam>);
           })}
         >
           <TextInput
-            label="Nama Pelajaran"
+            label="Mata Pelajaran"
             register={register}
             registerName="subject"
             placeholder="Math"
+            required
+          />
+
+          <TextInput
+            label="Durasi (Menit)"
+            register={(fieldName) => register(fieldName)}
+            registerName="duration"
+            placeholder="60"
             required
           />
 
@@ -51,7 +65,7 @@ export const CreateExam = React.memo(function CreateExam() {
             />
           </div>
 
-          <Button text="Submit" />
+          <Button text="Submit" loading={createExamLoading} />
         </form>
       </div>
     </div>

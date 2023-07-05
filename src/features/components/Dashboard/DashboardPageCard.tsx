@@ -1,6 +1,6 @@
 import { Pages } from "@/features";
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface Props {
   page: Pages;
@@ -9,6 +9,8 @@ interface Props {
 export const DashboardPageCard = React.memo(function DashboardPageCard({
   page,
 }: Props) {
+  const location = useLocation();
+
   return (
     <li>
       <Link

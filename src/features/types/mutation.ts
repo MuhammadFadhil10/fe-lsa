@@ -1,1 +1,1 @@
-export type MutationEvent = "START_EXAM" | "SUBMIT_EXAM";
+export type MutationEvent = "CREATE_EXAM" | "START_EXAM" | "SUBMIT_EXAM";

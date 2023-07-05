@@ -1,5 +1,5 @@
-import { CreateExam, DashboardPageContainer } from "@/features";
 import * as React from "react";
+import { CreateExam, DashboardPageContainer } from "@/features";
 
 export const CreateExamPage = React.memo(function CreateExamPage() {
   return (

@@ -1,5 +1,5 @@
 import { useMutation, QueryKey, useQueryClient } from "@tanstack/react-query";
-import { Exams, MutationEvent } from "..";
+import { Exam, Exams, MutationEvent } from "..";
 
 export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
   const queryClient = useQueryClient();
@@ -7,6 +7,9 @@ export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
   const mutationFn = async (body: unknown) => {
     switch (event) {
       // exam
+      case "CREATE_EXAM":
+        return Exams.createExam(body as Partial<Exam>);
+
       case "START_EXAM":
         return await Exams.startExams(body as string);
     }
