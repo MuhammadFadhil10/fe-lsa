@@ -50,7 +50,7 @@ export const CreateExam = React.memo(function CreateExam() {
             required
           />
 
-          <div className=" h-[450px] overflow-auto">
+          <div className=" h-[400px] ">
             <QuestionSection
               defaultQuestion={defaulQuestion}
               questions={questions}

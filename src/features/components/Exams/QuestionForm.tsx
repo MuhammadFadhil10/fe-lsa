@@ -4,16 +4,18 @@ import { Button } from "../node";
 
 interface Props {
   questionNumber: number;
+  currentQuestion: Partial<ExamQuestion>;
   onChange: (data: Partial<ExamQuestion>) => void;
   //   onQuestionSubmit: () => void;
 }
 
 export const QuestionForm = React.memo(function QuestionForm({
   questionNumber,
+  currentQuestion,
   onChange,
 }: //   onQuestionSubmit,
 Props) {
-  const [question, setQuestion] = React.useState<Partial<ExamQuestion>>({
+  const [, setQuestion] = React.useState<Partial<ExamQuestion>>({
     // _id: Date.now()
     question: "",
     answerKey: "",
@@ -24,12 +26,17 @@ Props) {
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setQuestion((prev) => {
         prev = { ...prev, [e.target.name]: e.target.value };
-        onChange(prev);
+
+        onChange({
+          ...currentQuestion,
+          [e.target.name]:
+            e.target.name === "score" ? +e.target.value : e.target.value,
+        });
 
         return prev;
       });
     },
-    [onChange]
+    [currentQuestion, onChange]
   );
 
   return (
@@ -45,7 +52,7 @@ Props) {
         <textarea
           id="question"
           name="question"
-          value={question.question}
+          value={currentQuestion.question}
           rows={4}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder={"Masukan soal"}
@@ -61,7 +68,7 @@ Props) {
         <textarea
           id="answerKey"
           name="answerKey"
-          value={question.answerKey}
+          value={currentQuestion.answerKey}
           rows={4}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder={"Masukan jawaban"}
@@ -77,7 +84,7 @@ Props) {
           <input
             id="score"
             type="text"
-            value={question.score}
+            value={currentQuestion.score}
             name="score"
             onChange={handleChange}
           />

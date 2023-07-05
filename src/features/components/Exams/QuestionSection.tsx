@@ -14,17 +14,21 @@ export const QuestionSection = React.memo(function QuestionSection({
   questions,
   setQuestions,
 }: Props) {
-  console.log("questions: ", questions);
+  const [currentQuestionIdx, setCurrentQuestionIdx] = React.useState(
+    questions.length - 1
+  );
 
+  console.log("currentQuestionIdx: ", currentQuestionIdx);
   return (
     <div className="w-full h-full">
       <h1 className="font-bold">Soal</h1>
 
       <QuestionForm
-        questionNumber={questions.length}
+        questionNumber={currentQuestionIdx + 1}
+        currentQuestion={questions[currentQuestionIdx]}
         onChange={(data) => {
           const newQuestion = questions;
-          newQuestion[questions.length - 1] = data;
+          newQuestion[currentQuestionIdx] = data;
 
           setQuestions([...newQuestion]);
         }}
@@ -46,12 +50,45 @@ export const QuestionSection = React.memo(function QuestionSection({
         </>
       ))} */}
 
-      
-      <Button
-        type="button"
-        text="Tambah Soal"
-        onClick={() => setQuestions([...questions, defaultQuestion])}
-      />
+      <div className="w-full flex">
+        <Button
+          type="button"
+          text="Tambah Soal"
+          onClick={() => {
+            setQuestions([...questions, defaultQuestion]);
+            setCurrentQuestionIdx(currentQuestionIdx + 1);
+          }}
+        />
+
+        {questions.length > 1 && (
+          <>
+            <div className="w-[10%]">
+              <Button
+                type="button"
+                text="<"
+                onClick={() => {
+                  if (currentQuestionIdx === 0) return;
+
+                  setCurrentQuestionIdx(currentQuestionIdx - 1);
+                }}
+                disabled={currentQuestionIdx === 0}
+              />
+            </div>
+            <div className="w-[10%]">
+              <Button
+                type="button"
+                text=">"
+                onClick={() => {
+                  if (currentQuestionIdx === questions.length - 1) return;
+
+                  setCurrentQuestionIdx(currentQuestionIdx + 1);
+                }}
+                disabled={currentQuestionIdx === questions.length - 1}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 });
