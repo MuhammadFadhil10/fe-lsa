@@ -25,7 +25,11 @@ export const ExamPreStart = React.memo(function ExamPreStart({
 
         <form
           className="flex items-center w-full"
-          onSubmit={handleSubmit((data) => onSubmitExamToken(data.examToken))}
+          onSubmit={handleSubmit((data, e) => {
+            e?.preventDefault();
+
+            onSubmitExamToken(data.examToken);
+          })}
         >
           <div className="w-[90%]">
             <TextInput
