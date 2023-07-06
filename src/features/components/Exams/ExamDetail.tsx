@@ -3,13 +3,17 @@ import { DashboardPageContainer } from "..";
 import { useParams } from "react-router-dom";
 import { Exam, useExams } from "@/features";
 import { ExamPreStart } from "./ExamPreStart";
+import Countdown from "react-countdown";
+import { Button, TextAreaInput } from "../node";
+import { useForm } from "react-hook-form";
 
 export const ExamDetail = React.memo(function ExamDetail() {
+  const { handleSubmit, register } = useForm();
   const { examId } = useParams();
   const { memoizedExams, handleStartExam, startExamError, isParticipated } =
     useExams();
 
-  const exam = memoizedExams?.find((e) => e._id === examId);
+  const exam = memoizedExams?.find((e) => e._id === examId) as Exam;
 
   return (
     <DashboardPageContainer>
@@ -35,12 +39,54 @@ export const ExamDetail = React.memo(function ExamDetail() {
           />
         )}
 
-        {isParticipated(exam as Exam) &&
-          exam?.questions.map((e, index) => (
-            <p>
-              {index + 1}. {e.question}
-            </p>
-          ))}
+        {isParticipated(exam as Exam) && (
+          <div>
+            {exam?.duration && (
+              <Countdown
+                date={Date.now() + +exam.duration * 1000}
+                intervalDelay={0}
+                precision={3}
+                renderer={({ hours, minutes, seconds }) => {
+                  return (
+                    <div className="w-full flex gap-2 text-2xl">
+                      <h1>Waktu:</h1>{" "}
+                      <h1 className="text-[red]">
+                        {hours > 0 && hours + " Jam"}{" "}
+                        {minutes > 0 && minutes + " Menit"} {seconds + " Detik"}
+                      </h1>
+                    </div>
+                  );
+                }}
+              >
+                <h1 className="text-2xl text-[red]">Waktu Habis!</h1>
+              </Countdown>
+            )}
+            {/* <h1>{duration}</h1> */}
+            <form
+              onSubmit={handleSubmit((data, e) => {
+                e?.preventDefault();
+
+                alert(JSON.stringify(data));
+              })}
+            >
+              {exam?.questions.map((e, index) => (
+                <div className="w-full">
+                  <p key={index}>
+                    {index + 1}. {e.question}
+                  </p>
+                  <TextAreaInput
+                    label="Jawab"
+                    register={register}
+                    registerName="answer"
+                    placeholder="Jawaban"
+                  />
+                </div>
+              ))}
+
+              <Button text="Submit" />
+            </form>
+          </div>
+        )}
       </div>
     </DashboardPageContainer>
   );

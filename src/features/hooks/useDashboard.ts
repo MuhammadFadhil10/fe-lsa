@@ -3,16 +3,21 @@ import { Pages, User, UserPayload } from "..";
 import { useQuery } from "@tanstack/react-query";
 
 export const useDashboard = () => {
-  const { data: rawTeachersStudents } = useQuery({
-    queryFn: User.getTeachersStudents,
-    queryKey: ["teachers-student"],
-  });
+  const user = JSON.parse(
+    localStorage.getItem("user-loggedin") ?? "{}"
+  ) as UserPayload;
 
-  const memoizedTeachersStudents = React.useMemo(() => {
-    if (!rawTeachersStudents) return [];
+  // const { data: rawTeachersStudents } = useQuery({
+  //   queryFn:
+  //     user.role === "teacher" ? User.getTeachersStudents : () => undefined,
+  //   queryKey: ["teachers-student"],
+  // });
 
-    return rawTeachersStudents as Partial<UserPayload>;
-  }, [rawTeachersStudents]);
+  // const memoizedTeachersStudents = React.useMemo(() => {
+  //   if (!rawTeachersStudents) return [];
+
+  //   return rawTeachersStudents as Partial<UserPayload>;
+  // }, [rawTeachersStudents]);
 
   const memoizedStudentPages: Pages[] = React.useMemo(() => {
     return [
@@ -47,6 +52,6 @@ export const useDashboard = () => {
   return {
     memoizedStudentPages,
     memoizedTeacherPages,
-    memoizedTeachersStudents,
+    // memoizedTeachersStudents,
   };
 };
