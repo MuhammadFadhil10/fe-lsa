@@ -34,7 +34,9 @@ export const ExamDetail = React.memo(function ExamDetail() {
         {/* body */}
         {!isParticipated(exam as Exam) && (
           <ExamPreStart
-            onSubmitExamToken={handleStartExam}
+            onSubmitExamToken={(examToken) =>
+              handleStartExam(examToken, examId as string)
+            }
             error={startExamError}
           />
         )}

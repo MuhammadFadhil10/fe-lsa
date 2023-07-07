@@ -10,8 +10,8 @@ export class Exams {
     return await Api.get("/teacher/exams");
   }
 
-  static async startExams(examToken: string) {
-    return await Api.post("/exam/start", { examToken });
+  static async startExams(examToken: string, examId: string) {
+    return await Api.post(`/exam/${examId}/start`, { examToken });
   }
 
   static async createExam(body: Partial<Exam>) {

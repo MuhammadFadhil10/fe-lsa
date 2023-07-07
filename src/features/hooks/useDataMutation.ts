@@ -10,8 +10,11 @@ export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
       case "CREATE_EXAM":
         return Exams.createExam(body as Partial<Exam>);
 
-      case "START_EXAM":
-        return await Exams.startExams(body as string);
+      case "START_EXAM": {
+        const params = body as any;
+
+        return await Exams.startExams(params.examToken, params.examId);
+      }
     }
   };
 

@@ -55,9 +55,9 @@ export const useExams = () => {
   );
 
   const handleStartExam = React.useCallback(
-    async (examToken: string) => {
+    async (examToken: string, examId: string) => {
       try {
-        await startExamMutation(examToken);
+        await startExamMutation({ examToken, examId });
 
         setStartExamError("");
       } catch (error) {
