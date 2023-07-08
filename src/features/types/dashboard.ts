@@ -14,7 +14,7 @@ export type Participan = {
   _id: string;
   studentId: string;
   examToken: string;
-  answer: string[];
+  answers: string[];
 };
 
 export interface Exam {
@@ -27,4 +27,9 @@ export interface Exam {
   questions: ExamQuestion[];
   endTime: Date;
   participants: Participan[];
+}
+
+export interface AnswerBody {
+  questionId: string;
+  answer: string;
 }

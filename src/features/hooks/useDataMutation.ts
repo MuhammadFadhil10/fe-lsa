@@ -15,6 +15,12 @@ export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
 
         return await Exams.startExams(params.examToken, params.examId);
       }
+
+      case "SUBMIT_EXAM": {
+        const params = body as any;
+
+        return await Exams.submitExam(params.answers, params.examId);
+      }
     }
   };
 

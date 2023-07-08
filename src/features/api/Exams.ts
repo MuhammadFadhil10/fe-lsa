@@ -10,11 +10,16 @@ export class Exams {
     return await Api.get("/teacher/exams");
   }
 
+  static async createExam(body: Partial<Exam>) {
+    return await Api.post("/teacher/exams", body);
+  }
+
+  // progress
   static async startExams(examToken: string, examId: string) {
     return await Api.post(`/exam/${examId}/start`, { examToken });
   }
 
-  static async createExam(body: Partial<Exam>) {
-    return await Api.post("/teacher/exams", body);
+  static async submitExam(answers: string[], examId: string) {
+    return await Api.post(`/exam/${examId}/submit`, { answers });
   }
 }

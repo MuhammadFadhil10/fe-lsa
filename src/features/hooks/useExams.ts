@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Exam, Exams, UserPayload, useDataMutation } from "..";
+import { AnswerBody, Exam, Exams, UserPayload, useDataMutation } from "..";
 import { useNavigate } from "react-router-dom";
 
 export const useExams = () => {
@@ -21,6 +21,9 @@ export const useExams = () => {
   const { mutateAsync: startExamMutation } = useDataMutation("START_EXAM", [
     "student-exams",
   ]);
+
+  const { mutateAsync: submitExamMutation, isLoading: submitExamLoading } =
+    useDataMutation("SUBMIT_EXAM", ["student-exams", "teacher-exams"]);
 
   const [startExamError, setStartExamError] = React.useState("");
 
@@ -69,14 +72,29 @@ export const useExams = () => {
     [startExamMutation]
   );
 
+  const handleSubmitExam = React.useCallback(
+    async (answers: AnswerBody[], examId: string) => {
+      try {
+        await submitExamMutation({ answers, examId });
+
+        navigate("/dashboard/student/exams");
+      } catch (error) {
+        console.log("submit exam err: ", (error as any).message);
+      }
+    },
+    [navigate, submitExamMutation]
+  );
+
   return {
     user,
     memoizedExams,
     startExamError,
     createExamLoading,
+    submitExamLoading,
     handleStartExam,
     isParticipated,
     createExamMutation,
     handleCreateExams,
+    handleSubmitExam,
   };
 };

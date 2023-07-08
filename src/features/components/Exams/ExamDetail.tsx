@@ -4,11 +4,9 @@ import { useParams } from "react-router-dom";
 import { Exam, useExams } from "@/features";
 import { ExamPreStart } from "./ExamPreStart";
 import Countdown from "react-countdown";
-import { Button, TextAreaInput } from "../node";
-import { useForm } from "react-hook-form";
+import { ExamTest } from "./ExamTest";
 
 export const ExamDetail = React.memo(function ExamDetail() {
-  const { handleSubmit, register } = useForm();
   const { examId } = useParams();
   const { memoizedExams, handleStartExam, startExamError, isParticipated } =
     useExams();
@@ -64,29 +62,7 @@ export const ExamDetail = React.memo(function ExamDetail() {
               </Countdown>
             )}
             {/* <h1>{duration}</h1> */}
-            <form
-              onSubmit={handleSubmit((data, e) => {
-                e?.preventDefault();
-
-                alert(JSON.stringify(data));
-              })}
-            >
-              {exam?.questions.map((e, index) => (
-                <div className="w-full">
-                  <p key={index}>
-                    {index + 1}. {e.question}
-                  </p>
-                  <TextAreaInput
-                    label="Jawab"
-                    register={register}
-                    registerName="answer"
-                    placeholder="Jawaban"
-                  />
-                </div>
-              ))}
-
-              <Button text="Submit" />
-            </form>
+            <ExamTest questions={exam?.questions} examId={exam?._id} />
           </div>
         )}
       </div>

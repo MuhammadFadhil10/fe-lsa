@@ -10,12 +10,17 @@ export const ExamsSection = React.memo(function ExamsSection() {
       <div className="border shadow-lg w-2/3 h-screen p-2 gap-3 flex flex-wrap overflow-auto">
         {memoizedExams?.map((exam: Exam, index) => {
           return (
-            <ExamCard
-              key={index}
-              exam={exam}
-              userRole={user.role}
-              isParticipated={isParticipated}
-            />
+            <>
+              {!exam.participants?.find((p) => p.studentId === user._id)
+                ?.answers && (
+                <ExamCard
+                  key={index}
+                  exam={exam}
+                  userRole={user.role}
+                  isParticipated={isParticipated}
+                />
+              )}
+            </>
           );
         })}
       </div>
