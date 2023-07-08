@@ -1,24 +1,7 @@
 import * as React from "react";
-import { Pages, User, UserPayload } from "..";
-import { useQuery } from "@tanstack/react-query";
+import { Pages } from "..";
 
 export const useDashboard = () => {
-  const user = JSON.parse(
-    localStorage.getItem("user-loggedin") ?? "{}"
-  ) as UserPayload;
-
-  // const { data: rawTeachersStudents } = useQuery({
-  //   queryFn:
-  //     user.role === "teacher" ? User.getTeachersStudents : () => undefined,
-  //   queryKey: ["teachers-student"],
-  // });
-
-  // const memoizedTeachersStudents = React.useMemo(() => {
-  //   if (!rawTeachersStudents) return [];
-
-  //   return rawTeachersStudents as Partial<UserPayload>;
-  // }, [rawTeachersStudents]);
-
   const memoizedStudentPages: Pages[] = React.useMemo(() => {
     return [
       {

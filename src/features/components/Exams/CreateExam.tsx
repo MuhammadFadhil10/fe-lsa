@@ -1,7 +1,7 @@
 import { Exam, ExamQuestion, QuestionSection, useExams } from "@/features";
 import * as React from "react";
 import { Button, TextInput } from "../node";
-import { useForm, FieldName } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 interface Props {
   defaultValues?: { [x: string]: any | undefined };
