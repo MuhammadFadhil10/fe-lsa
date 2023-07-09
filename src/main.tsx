@@ -18,7 +18,6 @@ import {
 } from "./features/index.ts";
 import {
   CreateExamPage,
-  EditExamPage,
   ExamEvaluatePage,
   ExamListPage,
   ExamResultsPage,

@@ -1,7 +1,6 @@
 import { Exam } from "@/features";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../node";
 
 interface Props {
   exam: Exam;

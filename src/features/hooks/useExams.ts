@@ -1,6 +1,13 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { AnswerBody, Exam, Exams, UserPayload, useDataMutation } from "..";
+import {
+  AnswerBody,
+  Exam,
+  ExamResult,
+  Exams,
+  UserPayload,
+  useDataMutation,
+} from "..";
 import { useNavigate } from "react-router-dom";
 
 export const useExams = () => {
@@ -13,6 +20,11 @@ export const useExams = () => {
   const { data: rawExams } = useQuery({
     queryFn: user?.role === "student" ? Exams.getExams : Exams.getTeacherExams,
     queryKey: user?.role === "student" ? ["student-exams"] : ["teacher-exams"],
+  });
+
+  const { data: rawExamsResults } = useQuery({
+    queryFn: Exams.getExamResults,
+    queryKey: ["exams-results"],
   });
 
   const { mutateAsync: createExamMutation, isLoading: createExamLoading } =
@@ -36,6 +48,12 @@ export const useExams = () => {
 
     return rawExams.data?.data as Exam[];
   }, [rawExams]);
+
+  const memoizedExamsResults: ExamResult[] = React.useMemo(() => {
+    if (!rawExamsResults) return [];
+
+    return rawExamsResults.data?.data;
+  }, [rawExamsResults]);
 
   const isParticipated = React.useCallback(
     (exam: Exam) => {
@@ -102,6 +120,7 @@ export const useExams = () => {
   return {
     user,
     memoizedExams,
+    memoizedExamsResults,
     startExamError,
     createExamLoading,
     submitExamLoading,

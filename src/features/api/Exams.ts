@@ -2,6 +2,7 @@ import { Api } from ".";
 import { Exam } from "..";
 
 export class Exams {
+  // read
   static async getExams() {
     return await Api.get("/student/exams");
   }
@@ -9,12 +10,16 @@ export class Exams {
   static async getTeacherExams() {
     return await Api.get("/teacher/exams");
   }
+  
+  static async getExamResults() {
+    return await Api.get("student/exam-results");
+  }
 
+  // write
   static async createExam(body: Partial<Exam>) {
     return await Api.post("/teacher/exams", body);
   }
 
-  // progress
   static async startExams(examToken: string, examId: string) {
     return await Api.post(`/exam/${examId}/start`, { examToken });
   }

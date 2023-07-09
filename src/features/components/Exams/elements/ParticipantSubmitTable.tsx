@@ -43,7 +43,10 @@ export const ParticipantSubmitTable = React.memo(
             {examParticipantsAnswered?.map((participant) => {
               return (
                 // <>
-                <tr className="bg-white overflow-hidden border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr
+                  key={participant._id}
+                  className="bg-white overflow-hidden border-b dark:bg-gray-800 dark:border-gray-700"
+                >
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -58,11 +61,15 @@ export const ParticipantSubmitTable = React.memo(
                   <td className="px-6 py-4 flex ">
                     <ol className="list-decimal flex flex-col h-full gap-3">
                       {participant.answers.map((value: any) => {
-                        return <li>{value.answer}</li>;
+                        return (
+                          <li>
+                            <h1>{value.answer}</h1>
+                          </li>
+                        );
                       })}
                     </ol>
                   </td>
-                  <td className="py-4  gap-2 w-[300px]">
+                  <td className="py-4 gap-2 w-[300px]">
                     {!participant?.score && (
                       <>
                         Metode Penilaian
@@ -86,7 +93,13 @@ export const ParticipantSubmitTable = React.memo(
                     {participant?.score && (
                       <h1 className="text-xl">
                         Skor siswa:{" "}
-                        <span className="text-green-600 font-bold">
+                        <span
+                          className={`${
+                            participant.score > 60
+                              ? "text-green-700"
+                              : "text-red-700"
+                          } font-bold`}
+                        >
                           {participant.score}
                         </span>
                       </h1>

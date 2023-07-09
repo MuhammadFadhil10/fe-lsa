@@ -30,6 +30,15 @@ export interface Exam {
   participants: Participan[];
 }
 
+export interface ExamResult {
+  subject: string;
+  score: number | null;
+  detail: {
+    question: string;
+    answer: string;
+  }[];
+}
+
 export interface AnswerBody {
   questionId: string;
   answer: string;
