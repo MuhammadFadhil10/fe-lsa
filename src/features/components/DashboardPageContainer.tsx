@@ -8,9 +8,7 @@ export const DashboardPageContainer = React.memo(
   function DashboardPageContainer({ children }: Props) {
     return (
       <div className="flex fixed top-12  items-start justify-end h-screen w-screen rounded dark:bg-gray-800">
-        <div className="w-[80vw] flex justify-center  p-2">
-          {children}
-        </div>
+        <div className="w-[80vw] flex justify-center  p-2">{children}</div>
       </div>
     );
   }

@@ -19,7 +19,7 @@ export const ExamCard = React.memo(function ExamCard({
   return (
     <div
       className=" cursor-pointer w-[300px] h-[100px] p-2 box-content bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-      onClick={() => navigate(`/dashboard/student/exams/${exam._id}`)}
+      onClick={() => navigate(`/dashboard/${userRole}/exams/${exam._id}`)}
     >
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         {exam.subject}
@@ -37,34 +37,6 @@ export const ExamCard = React.memo(function ExamCard({
             {isParticipated(exam) ? "Sudah dimulai" : "Belum dimulai"}
           </span>
         </p>
-      )}
-
-      {userRole === "teacher" && (
-        <div
-          className="flex"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <Button
-            type="button"
-            text="Edit"
-            onClick={(e) => {
-              e.stopPropagation();
-
-              navigate(`/dashboard/teacher/exams/edit/${exam._id}`);
-            }}
-          />
-          <Button
-            type="button"
-            variant="outlined"
-            text="Buang"
-            bgColor="red"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          />
-        </div>
       )}
     </div>
   );

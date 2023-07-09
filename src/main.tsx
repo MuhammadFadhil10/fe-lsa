@@ -16,7 +16,12 @@ import {
   ExamsSection,
   UserContextProvider,
 } from "./features/index.ts";
-import { CreateExamPage, EditExamPage, ExamListPage } from "./pages";
+import {
+  CreateExamPage,
+  EditExamPage,
+  ExamEvaluatePage,
+  ExamListPage,
+} from "./pages";
 
 // router
 const router = createBrowserRouter(
@@ -77,14 +82,12 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path="/dashboard/teacher/exams/edit/:examId"
+        path="/dashboard/teacher/exams/:examId"
         element={
           <>
             <DashboardHeader />
             <DashboardSidebar />
-            <EditExamPage />
-
-            {/* <DashBoard /> */}
+            <ExamEvaluatePage />
           </>
         }
       />

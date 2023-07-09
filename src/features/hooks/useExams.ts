@@ -25,6 +25,9 @@ export const useExams = () => {
   const { mutateAsync: submitExamMutation, isLoading: submitExamLoading } =
     useDataMutation("SUBMIT_EXAM", ["student-exams", "teacher-exams"]);
 
+  const { mutateAsync: evaluateExamMutation, isLoading: evaluateExamLoading } =
+    useDataMutation("EVALUATE_EXAM", ["teacher-exams"]);
+
   const [startExamError, setStartExamError] = React.useState("");
 
   // memo
@@ -50,8 +53,8 @@ export const useExams = () => {
         await createExamMutation(body);
 
         navigate("/dashboard/teacher/exams");
-      } catch (error) {
-        console.log("error create exam: ", (error as any).message);
+      } catch (error: any) {
+        console.log("error create exam: ", error.message);
       }
     },
     [createExamMutation, navigate]
@@ -63,8 +66,8 @@ export const useExams = () => {
         await startExamMutation({ examToken, examId });
 
         setStartExamError("");
-      } catch (error) {
-        console.log("start exam error: ", (error as any).response.data.message);
+      } catch (error: any) {
+        console.log("start exam error: ", error.response.data.message);
 
         setStartExamError((error as any).response.data.message);
       }
@@ -78,11 +81,22 @@ export const useExams = () => {
         await submitExamMutation({ answers, examId });
 
         navigate("/dashboard/student/exams");
-      } catch (error) {
-        console.log("submit exam err: ", (error as any).message);
+      } catch (error: any) {
+        console.log("submit exam err: ", error.message);
       }
     },
     [navigate, submitExamMutation]
+  );
+
+  const handleEvaluateExam = React.useCallback(
+    async (examId: string, studentId: string) => {
+      try {
+        evaluateExamMutation({ examId, studentId });
+      } catch (error: any) {
+        console.log("submit exam err: ", error.message);
+      }
+    },
+    [evaluateExamMutation]
   );
 
   return {
@@ -91,10 +105,12 @@ export const useExams = () => {
     startExamError,
     createExamLoading,
     submitExamLoading,
+    evaluateExamLoading,
     handleStartExam,
     isParticipated,
     createExamMutation,
     handleCreateExams,
     handleSubmitExam,
+    handleEvaluateExam,
   };
 };

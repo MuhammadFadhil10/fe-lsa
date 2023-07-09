@@ -12,14 +12,17 @@ export const ExamsSection = React.memo(function ExamsSection() {
           return (
             <>
               {!exam.participants?.find((p) => p.studentId === user._id)
-                ?.answers && (
-                <ExamCard
-                  key={index}
-                  exam={exam}
-                  userRole={user.role}
-                  isParticipated={isParticipated}
-                />
-              )}
+                ?.score &&
+                (exam.participants?.find((p) => p.studentId === user._id)
+                  ?.answers?.length === 0 ||
+                  !isParticipated(exam)) && (
+                  <ExamCard
+                    key={index}
+                    exam={exam}
+                    userRole={user.role}
+                    isParticipated={isParticipated}
+                  />
+                )}
             </>
           );
         })}

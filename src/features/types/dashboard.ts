@@ -15,6 +15,7 @@ export type Participan = {
   studentId: string;
   examToken: string;
   answers: string[];
+  score?: number;
 };
 
 export interface Exam {

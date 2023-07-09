@@ -22,4 +22,8 @@ export class Exams {
   static async submitExam(answers: string[], examId: string) {
     return await Api.post(`/exam/${examId}/submit`, { answers });
   }
+
+  static async evaluateExam(examId: string, studentId: string) {
+    return await Api.post(`/teacher/exams/${examId}/evaluate/${studentId}`);
+  }
 }
