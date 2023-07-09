@@ -21,6 +21,7 @@ import {
   EditExamPage,
   ExamEvaluatePage,
   ExamListPage,
+  ExamResultsPage,
 } from "./pages";
 
 // router
@@ -42,7 +43,7 @@ const router = createBrowserRouter(
             {/* <DashBoard /> */}
           </>
         }
-      ></Route>
+      />
 
       <Route
         path="/dashboard/student/exams/:examId"
@@ -52,6 +53,18 @@ const router = createBrowserRouter(
             <DashboardSidebar />
 
             <ExamDetail />
+          </>
+        }
+      />
+
+      <Route
+        path="/dashboard/student/exams-results"
+        element={
+          <>
+            <DashboardHeader />
+            <DashboardSidebar />
+
+            <ExamResultsPage />
           </>
         }
       />

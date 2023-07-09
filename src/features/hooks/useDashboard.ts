@@ -9,12 +9,8 @@ export const useDashboard = () => {
         path: "/dashboard/student/exams",
       },
       {
-        label: "Mata Kuliah",
-        path: "/dashboard/student/subject",
-      },
-      {
         label: "Hasil Test",
-        path: "/dashboard/student/results",
+        path: "/dashboard/student/exams-results",
       },
     ] as Pages[];
   }, []);
