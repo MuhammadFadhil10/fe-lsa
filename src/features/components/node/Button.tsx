@@ -5,7 +5,7 @@ interface Props {
   type?: "button" | "submit";
   variant?: "fill" | "outlined";
   id?: string;
-  classname?: string;
+  className?: string;
   text: string;
   bgColor?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -17,7 +17,7 @@ export const Button = React.memo(function Button({
   type = "submit",
   variant = "fill",
   id = "",
-  classname = "",
+  className = "w-full",
   text,
   bgColor,
   onClick,
@@ -28,7 +28,7 @@ export const Button = React.memo(function Button({
     <button
       id={id}
       type={type}
-      className={` flex justify-center mt-5 w-full ${
+      className={` flex justify-center mt-5  ${
         variant === "fill"
           ? disabled
             ? "bg-gray-500 text-black"
@@ -47,7 +47,7 @@ export const Button = React.memo(function Button({
           : ""
       }
       font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none dark:focus:ring-blue-800 
-        ${classname}
+        ${className}
       `}
       onClick={onClick}
       disabled={loading || disabled}

@@ -58,12 +58,14 @@ export const ExamTest = React.memo(function ExamTest({
 
         handleSubmitExam(answers, examId);
       }}
+
+      className="flex flex-col gap-5"
     >
       {questions?.map((question, index) => (
-        <div className="w-full">
-          <p key={index}>
+        <div className="w-full flex flex-col gap-3">
+          <h1 key={index} className="text-xl" >
             {index + 1}. {question.question}
-          </p>
+          </h1>
 
           <div>
             <label

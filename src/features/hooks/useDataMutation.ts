@@ -25,7 +25,11 @@ export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
       case "EVALUATE_EXAM": {
         const params = body as any;
 
-        return await Exams.evaluateExam(params.examId, params.studentId);
+        return await Exams.evaluateExam(
+          params.examId,
+          params.studentId,
+          params.method
+        );
       }
 
       case "TOGGLE_ADD_STUDENT":

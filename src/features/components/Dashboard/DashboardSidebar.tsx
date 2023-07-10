@@ -12,7 +12,7 @@ export const DashboardSidebar = React.memo(function DashboardSidebar() {
   return (
     <aside
       id="default-sidebar"
-      className="fixed  shadow-lg top-10 left-0 z-40 w-[15vw] h-screen transition-transform -translate-x-full sm:translate-x-0"
+      className="fixed shadow-lg top-8 left-0 z-40 w-[15vw] h-screen transition-transform -translate-x-full sm:translate-x-0"
       aria-label="Sidebar"
     >
       <div className="h-full py-4 overflow-y-auto bg-primary dark:bg-gray-800">

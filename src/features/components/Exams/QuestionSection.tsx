@@ -34,23 +34,7 @@ export const QuestionSection = React.memo(function QuestionSection({
         }}
       />
 
-      {/* {questions.map((_question, index) => (
-        <>
-          <QuestionForm
-            key={index}
-            questionNumber={index + 1}
-            onChange={(data) => {
-              const newQuestion = questions;
-              newQuestion[questions.length - 1] = data;
-
-              setQuestions([...newQuestion]);
-            }}
-          />
-          <div className="w-full h-[3px] bg-gray-300 mt-5 mb-5"></div>
-        </>
-      ))} */}
-
-      <div className="w-full flex">
+      <div className="w-1/2 flex gap-3">
         <Button
           type="button"
           text="Tambah Soal"
@@ -62,7 +46,7 @@ export const QuestionSection = React.memo(function QuestionSection({
 
         {questions.length > 1 && (
           <>
-            <div className="w-[10%]">
+            <div>
               <Button
                 type="button"
                 text="<"
@@ -74,7 +58,7 @@ export const QuestionSection = React.memo(function QuestionSection({
                 disabled={currentQuestionIdx === 0}
               />
             </div>
-            <div className="w-[10%]">
+            <div className="w-[50px]">
               <Button
                 type="button"
                 text=">"

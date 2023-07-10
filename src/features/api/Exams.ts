@@ -10,7 +10,7 @@ export class Exams {
   static async getTeacherExams() {
     return await Api.get("/teacher/exams");
   }
-  
+
   static async getExamResults() {
     return await Api.get("student/exam-results");
   }
@@ -28,7 +28,9 @@ export class Exams {
     return await Api.post(`/exam/${examId}/submit`, { answers });
   }
 
-  static async evaluateExam(examId: string, studentId: string) {
-    return await Api.post(`/teacher/exams/${examId}/evaluate/${studentId}`);
+  static async evaluateExam(examId: string, studentId: string, method: string) {
+    return await Api.post(`/teacher/exams/${examId}/evaluate/${studentId}`, {
+      method,
+    });
   }
 }

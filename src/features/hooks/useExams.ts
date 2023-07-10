@@ -107,9 +107,9 @@ export const useExams = () => {
   );
 
   const handleEvaluateExam = React.useCallback(
-    async (examId: string, studentId: string) => {
+    async (examId: string, studentId: string, method: string) => {
       try {
-        evaluateExamMutation({ examId, studentId });
+        evaluateExamMutation({ examId, studentId, method });
       } catch (error: any) {
         console.log("submit exam err: ", error.message);
       }
