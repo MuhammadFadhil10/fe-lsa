@@ -30,7 +30,7 @@ export const CreateExam = React.memo(function CreateExam({
   );
 
   return (
-    <div className="border shadow-lg w-2/3 h-screen  overflow-auto pb-20">
+    <div className="border shadow-lg w-full h-[95vh]  overflow-auto pb-20">
       {/* header */}
       <div className="w-full p-2 flex justify-between text-2xl border border-[3px] border-t-0 border-l-0 border-r-0">
         Buat Test

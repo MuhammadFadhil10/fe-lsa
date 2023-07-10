@@ -38,6 +38,7 @@ export const QuestionSection = React.memo(function QuestionSection({
         <Button
           type="button"
           text="Tambah Soal"
+          className="w-[200px]"
           onClick={() => {
             setQuestions([...questions, defaultQuestion]);
             setCurrentQuestionIdx(currentQuestionIdx + 1);

@@ -70,7 +70,7 @@ export const QuestionForm = React.memo(function QuestionForm({
           placeholder={"Masukan jawaban"}
           onChange={handleChange}
         />
-        <div className="flex flex-col w-[100px]">
+        <div className="flex flex-col w-[200px]">
           <label
             htmlFor="score"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"

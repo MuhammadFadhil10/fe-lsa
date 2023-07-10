@@ -9,7 +9,7 @@ export const ExamsSection = React.memo(function ExamsSection() {
 
   return (
     <DashboardPageContainer>
-      <div className="border shadow-lg w-2/3 h-screen p-2 gap-3 flex flex-wrap overflow-auto">
+      <div className="border shadow-lg w-full h-[95vh] overflow-auto p-2 flex gap-3 grid grid-cols-4 grid-rows-[250px] overflow-auto">
         {memoizedExams?.map((exam: Exam, index) => {
           return (
             <>
