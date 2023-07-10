@@ -32,9 +32,18 @@ export const useDashboard = () => {
     ] as Pages[];
   }, []);
 
+  const handleGetInitialName = React.useCallback((name: string) => {
+    const initial = name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+
+    return initial;
+  }, []);
+
   return {
     memoizedStudentPages,
     memoizedTeacherPages,
-    // memoizedTeachersStudents,
+    handleGetInitialName,
   };
 };
