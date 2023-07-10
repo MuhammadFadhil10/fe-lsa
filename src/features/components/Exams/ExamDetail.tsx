@@ -3,13 +3,24 @@ import { DashboardPageContainer } from "..";
 import { useParams } from "react-router-dom";
 import { Exam, useExams } from "@/features";
 import { ExamPreStart } from "./ExamPreStart";
-import Countdown from "react-countdown";
 import { ExamTest } from "./ExamTest";
+import { ExamCountdown } from "./elements/ExamCountdown";
+
+interface AnswerBody {
+  questionId: string;
+  answer: string;
+}
 
 export const ExamDetail = React.memo(function ExamDetail() {
   const { examId } = useParams();
-  const { memoizedExams, handleStartExam, startExamError, isParticipated } =
-    useExams();
+  const {
+    memoizedExams,
+    handleStartExam,
+    startExamError,
+    isParticipated,
+    handleSubmitExam,
+  } = useExams();
+  const answersRef = React.useRef<AnswerBody[]>([]);
 
   const exam = memoizedExams?.find((e) => e._id === examId) as Exam;
 
@@ -47,30 +58,19 @@ export const ExamDetail = React.memo(function ExamDetail() {
               </h1>
               <div className="w-full flex ">
                 {exam?.duration && (
-                  <Countdown
-                    date={Date.now() + +exam.duration * 1000}
-                    intervalDelay={0}
-                    precision={3}
-                    renderer={({ hours, minutes, seconds }) => {
-                      return (
-                        <div className="w-full flex justify-end gap-2 text-2xl">
-                          <h1>Waktu:</h1>{" "}
-                          <h1 className="text-[red]">
-                            {hours > 0 && hours + " Jam"}{" "}
-                            {minutes > 0 && minutes + " Menit"}{" "}
-                            {seconds + " Detik"}
-                          </h1>
-                        </div>
-                      );
-                    }}
-                  >
-                    <h1 className="text-2xl text-[red]">Waktu Habis!</h1>
-                  </Countdown>
+                  <ExamCountdown
+                    ref={answersRef}
+                    exam={exam}
+                    handleSubmitExam={handleSubmitExam}
+                  />
                 )}
               </div>
             </div>
-            {/* <h1>{duration}</h1> */}
-            <ExamTest questions={exam?.questions} examId={exam?._id} />
+            <ExamTest
+              ref={answersRef}
+              questions={exam?.questions}
+              examId={exam?._id}
+            />
           </div>
         )}
       </div>

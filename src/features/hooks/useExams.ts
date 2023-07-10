@@ -97,8 +97,7 @@ export const useExams = () => {
     async (answers: AnswerBody[], examId: string) => {
       try {
         await submitExamMutation({ answers, examId });
-
-        navigate("/dashboard/student/exams");
+        navigate("/dashboard/student/exams-results");
       } catch (error: any) {
         console.log("submit exam err: ", error.message);
       }
