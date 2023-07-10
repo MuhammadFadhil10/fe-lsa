@@ -32,7 +32,13 @@ export const ExamDetail = React.memo(function ExamDetail() {
           <div className="w-full p-2 flex justify-between border border-[3px] border-t-0 border-l-0 border-r-0">
             <div className=" text-2xl">
               <h1>Mata Kuliah: {exam?.subject}</h1>
-              <h1>Waktu: {+(exam?.duration ?? 0) / 60} Menit</h1>
+              <h1>
+                Waktu:{" "}
+                {+(exam?.duration ?? 0)
+                  ? +(exam?.duration ?? 0)
+                  : +(exam?.duration ?? 0) / 60}{" "}
+                {+(exam?.duration ?? 0) >= 60 ? "Menit" : "Detik"}
+              </h1>
             </div>
             <div className="text-2xl">
               <h1>Token: {exam?.examToken}</h1>
