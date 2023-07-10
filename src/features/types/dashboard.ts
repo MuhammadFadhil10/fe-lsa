@@ -24,6 +24,7 @@ export interface Exam {
   studentIds: string[];
   subject: string;
   duration: string;
+  thumbnailPath: string;
   examToken: string;
   questions: ExamQuestion[];
   endTime: Date;

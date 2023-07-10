@@ -42,13 +42,25 @@ export const CreateExam = React.memo(function CreateExam({
           onSubmit={handleSubmit((data, e) => {
             e?.preventDefault();
 
+            const random = Math.floor(Math.random() * 10);
+
+            const thumbnailPath =
+              random <= 2
+                ? "https://static.vecteezy.com/system/resources/previews/006/932/855/large_2x/colorful-background-with-texture-pattern-free-photo.jpg"
+                : random <= 5
+                ? "https://static.vecteezy.com/system/resources/previews/009/865/977/non_2x/abstract-retro-pattern-design-background-free-vector.jpg"
+                : random <= 7
+                ? "https://static.vecteezy.com/system/resources/previews/011/219/294/non_2x/japanese-background-with-line-wave-pattern-abstract-template-with-geometric-pattern-mountain-layout-design-in-oriental-style-free-vector.jpg"
+                : "https://static.vecteezy.com/system/resources/previews/015/176/032/non_2x/lines-seamless-pattern-banner-geometric-striped-ornament-monochrome-linear-background-free-vector.jpg";
+
             const payload = {
               ...data,
               questions,
+              thumbnailPath,
               duration: (+data?.duration * 60).toString(),
-            };
+            } as Partial<Exam>;
 
-            handleCreateExams(payload as Partial<Exam>);
+            handleCreateExams(payload);
           })}
         >
           <TextInput
