@@ -10,4 +10,14 @@ export class User {
 
     return response.data?.data;
   }
+
+  static async getAllStudents() {
+    const response = await Api.get("/student/all");
+
+    return response.data?.data;
+  }
+
+  static async toggleAddTeacherStudent(studentIds: string[]) {
+    await Api.post("/teacher/students", { studentIds });
+  }
 }

@@ -1,5 +1,5 @@
 import { useMutation, QueryKey, useQueryClient } from "@tanstack/react-query";
-import { Exam, Exams, MutationEvent } from "..";
+import { Exam, Exams, MutationEvent, User } from "..";
 
 export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
   const queryClient = useQueryClient();
@@ -27,6 +27,9 @@ export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
 
         return await Exams.evaluateExam(params.examId, params.studentId);
       }
+
+      case "TOGGLE_ADD_STUDENT":
+        return await User.toggleAddTeacherStudent(body as string[]);
     }
   };
 

@@ -25,6 +25,10 @@ export const useDashboard = () => {
         label: "Test Saya",
         path: "/dashboard/teacher/exams",
       },
+      {
+        label: "Murid",
+        path: "/dashboard/teacher/students",
+      },
     ] as Pages[];
   }, []);
 

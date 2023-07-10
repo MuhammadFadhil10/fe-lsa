@@ -21,6 +21,7 @@ import {
   ExamEvaluatePage,
   ExamListPage,
   ExamResultsPage,
+  TeacherStudentsPage,
 } from "./pages";
 
 // router
@@ -100,6 +101,18 @@ const router = createBrowserRouter(
             <DashboardHeader />
             <DashboardSidebar />
             <ExamEvaluatePage />
+          </>
+        }
+      />
+
+      <Route
+        path="/dashboard/teacher/students"
+        element={
+          <>
+            <DashboardHeader />
+            <DashboardSidebar />
+
+            <TeacherStudentsPage />
           </>
         }
       />

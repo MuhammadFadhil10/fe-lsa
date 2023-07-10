@@ -4,10 +4,11 @@ import { LoadingSpinner } from "..";
 interface Props {
   type?: "button" | "submit";
   variant?: "fill" | "outlined";
+  id?: string;
   classname?: string;
   text: string;
   bgColor?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   loading?: boolean;
   disabled?: boolean;
 }
@@ -15,6 +16,7 @@ interface Props {
 export const Button = React.memo(function Button({
   type = "submit",
   variant = "fill",
+  id = "",
   classname = "",
   text,
   bgColor,
@@ -24,6 +26,7 @@ export const Button = React.memo(function Button({
 }: Props) {
   return (
     <button
+      id={id}
       type={type}
       className={` flex justify-center mt-5 w-full ${
         variant === "fill"
