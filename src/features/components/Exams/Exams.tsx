@@ -5,8 +5,6 @@ import { ExamCard } from "./ExamCard";
 export const ExamsSection = React.memo(function ExamsSection() {
   const { memoizedExams, user, isParticipated } = useExams();
 
-  console.log("memoizedExams: ", memoizedExams);
-
   return (
     <DashboardPageContainer>
       <div className="border shadow-lg w-full h-[95vh] overflow-auto p-2 flex gap-3 grid grid-cols-4 grid-rows-[250px] overflow-auto">

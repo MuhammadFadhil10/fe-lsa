@@ -6,6 +6,7 @@ import {
   ExamResult,
   Exams,
   UserPayload,
+  setAuthToken,
   useDataMutation,
 } from "..";
 import { useNavigate } from "react-router-dom";
@@ -58,7 +59,9 @@ export const useExams = () => {
   const isParticipated = React.useCallback(
     (exam: Exam) => {
       return (
-        exam?.participants.findIndex((p) => p.studentId === user._id) !== -1
+        exam?.participants.findIndex((p) => p.studentId === user._id) !== -1 &&
+        exam?.participants.findIndex((p) => p.examToken === exam.examToken) !==
+          -1
       );
     },
     [user._id]
@@ -81,7 +84,15 @@ export const useExams = () => {
   const handleStartExam = React.useCallback(
     async (examToken: string, examId: string) => {
       try {
-        await startExamMutation({ examToken, examId });
+        const response = await startExamMutation({ examToken, examId });
+
+        localStorage.setItem("user-token", response?.data?.token);
+        localStorage.setItem(
+          "user-loggedin",
+          JSON.stringify(response?.data?.user)
+        );
+
+        setAuthToken(response?.data?.token);
 
         setStartExamError("");
       } catch (error: any) {
