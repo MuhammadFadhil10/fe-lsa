@@ -14,8 +14,6 @@ export const ParticipantSubmitTable = React.memo(
     const { memoizedExams, handleEvaluateExam, evaluateExamLoading } =
       useExams();
 
-    const [method, setMethod] = React.useState("cosine");
-
     const examParticipantsAnswered = React.useMemo(() => {
       return memoizedExams
         ?.find((exam) => exam._id === examId)
@@ -74,11 +72,11 @@ export const ParticipantSubmitTable = React.memo(
                         </ol>
                       </td>
                       <td className="py-4 gap-2 w-[300px]">
-                        {!participant?.score &&
-                          typeof participant.score !== "number" && (
+                        {/* cosine */}
+                        {!participant?.cosineScore &&
+                          typeof participant.cosineScore !== "number" && (
                             <>
-                              Metode Penilaian
-                              <form className=" w-[150px]">
+                              {/* <form className=" w-[150px]">
                                 <select
                                   value={method}
                                   className="w-full rounded-lg"
@@ -87,38 +85,96 @@ export const ParticipantSubmitTable = React.memo(
                                   <option value="cosine">Cosine</option>
                                   <option value="dice">Dice</option>
                                 </select>
-                              </form>
-                              <Button
-                                text="Nilai"
-                                type="button"
-                                className="w-[150px]"
-                                onClick={() =>
-                                  examId &&
-                                  handleEvaluateExam(
-                                    examId,
-                                    participant.studentId,
-                                    method
-                                  )
-                                }
-                                loading={evaluateExamLoading}
-                              />
+                              </form> */}
+                              {
+                                <Button
+                                  text="Nilai dengan metode Cosine"
+                                  type="button"
+                                  className="w-full"
+                                  onClick={() =>
+                                    examId &&
+                                    handleEvaluateExam(
+                                      examId,
+                                      participant.studentId,
+                                      "cosine"
+                                    )
+                                  }
+                                  loading={evaluateExamLoading}
+                                />
+                              }
                             </>
                           )}
-                        {(participant?.score ||
-                          typeof participant.score === "number") && (
-                          <h1 className="text-xl">
-                            Skor siswa:{" "}
-                            <span
-                              className={`${
-                                (participant.score as number) > 60
-                                  ? "text-green-700"
-                                  : "text-red-700"
-                              } font-bold`}
-                            >
-                              {participant.score}
-                            </span>
-                          </h1>
-                        )}
+
+                        {/* dice */}
+                        {!participant?.diceScore &&
+                          typeof participant.diceScore !== "number" && (
+                            <>
+                              {/* <form className=" w-full">
+                                <select
+                                  value={method}
+                                  className="w-full rounded-lg"
+                                  onChange={(e) => setMethod(e.target.value)}
+                                >
+                                  <option value="cosine">Cosine</option>
+                                  <option value="dice">Dice</option>
+                                </select>
+                              </form> */}
+                              {
+                                <Button
+                                  text="Nilai dengan metode Dice"
+                                  type="button"
+                                  className="w-full"
+                                  onClick={() =>
+                                    examId &&
+                                    handleEvaluateExam(
+                                      examId,
+                                      participant.studentId,
+                                      "dice"
+                                    )
+                                  }
+                                  loading={evaluateExamLoading}
+                                />
+                              }
+                            </>
+                          )}
+
+                        {/* cosine */}
+                        {participant?.cosineScore &&
+                          typeof participant.cosineScore === "number" && (
+                            <>
+                              <h1 className="text-xl">
+                                Skor cosine siswa:{" "}
+                                <span
+                                  className={`${
+                                    (participant.cosineScore as number) > 60
+                                      ? "text-green-700"
+                                      : "text-red-700"
+                                  } font-bold`}
+                                >
+                                  {participant.cosineScore}
+                                </span>
+                              </h1>
+                            </>
+                          )}
+
+                        {/* dice */}
+                        {participant?.diceScore &&
+                          typeof participant.diceScore === "number" && (
+                            <>
+                              <h1 className="text-xl">
+                                Skor dice siswa:{" "}
+                                <span
+                                  className={`${
+                                    (participant.diceScore as number) > 60
+                                      ? "text-green-700"
+                                      : "text-red-700"
+                                  } font-bold`}
+                                >
+                                  {participant.diceScore}
+                                </span>
+                              </h1>
+                            </>
+                          )}
                       </td>
                     </tr>
                   );

@@ -11,8 +11,10 @@ export const ExamsSection = React.memo(function ExamsSection() {
         {memoizedExams?.map((exam: Exam, index) => {
           return (
             <>
-              {!exam.participants?.find((p) => p.studentId === user._id)
-                ?.score &&
+              {(!exam.participants?.find((p) => p.studentId === user._id)
+                ?.cosineScore ||
+                !exam.participants?.find((p) => p.studentId === user._id)
+                  ?.diceScore) &&
                 (exam.participants?.find((p) => p.studentId === user._id)
                   ?.answers?.length === 0 ||
                   !isParticipated(exam)) && (

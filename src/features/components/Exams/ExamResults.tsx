@@ -62,18 +62,52 @@ export const ExamResults = React.memo(function ExamResults() {
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        {result.score || typeof result.score === "number" ? (
-                          <h1
-                            className={`text-xl ${
-                              result.score && result.score > 60
-                                ? "text-green-700"
-                                : "text-red-700"
-                            }`}
-                          >
-                            {result.score}
+                        {/* cosine */}
+                        {result.cosineScore ||
+                        typeof result.cosineScore === "number" ? (
+                          <h1 className="text-xl">
+                            Nilai Cosine:{" "}
+                            <span
+                              className={`text-xl ${
+                                result.cosineScore && result.cosineScore > 60
+                                  ? "text-green-700"
+                                  : "text-red-700"
+                              }`}
+                            >
+                              {result.cosineScore}
+                            </span>
                           </h1>
                         ) : (
-                          <h1 className="text-red-700">Belum Dinilai</h1>
+                          <h1>
+                            Nilai Cosine:{" "}
+                            <span className="text-red-700">
+                              Belum ada penilaian Cosine
+                            </span>
+                          </h1>
+                        )}
+
+                        {/* dice */}
+                        {result.diceScore ||
+                        typeof result.diceScore === "number" ? (
+                          <h1 className="text-xl">
+                            Nilai Dice:{" "}
+                            <span
+                              className={`text-xl ${
+                                result.diceScore && result.diceScore > 60
+                                  ? "text-green-700"
+                                  : "text-red-700"
+                              }`}
+                            >
+                              {result.diceScore}
+                            </span>
+                          </h1>
+                        ) : (
+                          <h1>
+                            Nilai Dice:{" "}
+                            <span className="text-red-700">
+                              Belum ada penilaian Dice
+                            </span>
+                          </h1>
                         )}
                       </td>
                     </tr>

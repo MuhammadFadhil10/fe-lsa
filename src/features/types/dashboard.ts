@@ -15,7 +15,8 @@ export type Participan = {
   studentId: string;
   examToken: string;
   answers: string[];
-  score?: number;
+  cosineScore?: number;
+  diceScore?: number;
 };
 
 export interface Exam {
@@ -33,7 +34,8 @@ export interface Exam {
 
 export interface ExamResult {
   subject: string;
-  score: number | null;
+  cosineScore: number | null;
+  diceScore: number | null;
   detail: {
     question: string;
     answer: string;
