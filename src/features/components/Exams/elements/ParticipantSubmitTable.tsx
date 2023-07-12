@@ -11,8 +11,12 @@ export const ParticipantSubmitTable = React.memo(
       queryKey: ["teacher-students"],
     });
     const { examId } = useParams();
-    const { memoizedExams, handleEvaluateExam, evaluateExamLoading } =
-      useExams();
+    const {
+      memoizedExams,
+      handleEvaluateExam,
+      evaluateExamLoading,
+      trimAnswer,
+    } = useExams();
 
     const examParticipantsAnswered = React.useMemo(() => {
       return memoizedExams
@@ -23,9 +27,9 @@ export const ParticipantSubmitTable = React.memo(
     return (
       <>
         {(examParticipantsAnswered ?? [])?.length > 0 && (
-          <div className="relative overflow-x-auto w-full ">
+          <div className="relative  w-full ">
             <h1 className="text-xl">Data jawaban siswa</h1>
-            <table className=" overflow-hidden w-full text-sm text-gray-500 dark:text-gray-400">
+            <table className=" overflow-hidden  w-full text-sm text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-left w-full bg-primary text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr className="">
                   <th scope="col" className="px-6 py-3">
@@ -39,7 +43,7 @@ export const ParticipantSubmitTable = React.memo(
                   </th>
                 </tr>
               </thead>
-              <tbody className=" w-full text-left overflow-hidden">
+              <tbody className=" w-full  text-left overflow-y-scroll">
                 {examParticipantsAnswered?.map((participant) => {
                   return (
                     // <>
@@ -59,13 +63,14 @@ export const ParticipantSubmitTable = React.memo(
                       </th>
                       <td
                         scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        className="px-6 bg-[red] overflow-y-auto overflow-x-hidden w-[400px] py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        <ol className="list-decimal flex flex-col h-full gap-3">
+                        <ol className="list-decimal flex flex-col h-full w-[400px] gap-3">
                           {participant.answers.map((value: any) => {
                             return (
                               <li key={value}>
-                                <h1>{value.answer}</h1>
+                                <h1>{trimAnswer(value.answer)}</h1>
+                                <h1 className=" break-words">{value.answer}</h1>
                               </li>
                             );
                           })}
@@ -140,7 +145,7 @@ export const ParticipantSubmitTable = React.memo(
 
                         {/* cosine */}
                         {participant?.cosineScore ||
-                          typeof participant.cosineScore === "number" && (
+                          (typeof participant.cosineScore === "number" && (
                             <>
                               <h1 className="text-xl">
                                 Skor cosine siswa:{" "}
@@ -155,11 +160,11 @@ export const ParticipantSubmitTable = React.memo(
                                 </span>
                               </h1>
                             </>
-                          )}
+                          ))}
 
                         {/* dice */}
                         {participant?.diceScore ||
-                          typeof participant.diceScore === "number" && (
+                          (typeof participant.diceScore === "number" && (
                             <>
                               <h1 className="text-xl">
                                 Skor dice siswa:{" "}
@@ -174,7 +179,7 @@ export const ParticipantSubmitTable = React.memo(
                                 </span>
                               </h1>
                             </>
-                          )}
+                          ))}
                       </td>
                     </tr>
                   );

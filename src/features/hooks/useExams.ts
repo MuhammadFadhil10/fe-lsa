@@ -127,6 +127,10 @@ export const useExams = () => {
     [evaluateExamMutation]
   );
 
+  const trimAnswer = React.useCallback((text: string) => {
+    return text.substring(0, 50) + "...";
+  }, []);
+
   return {
     user,
     memoizedExams,
@@ -141,5 +145,6 @@ export const useExams = () => {
     handleCreateExams,
     handleSubmitExam,
     handleEvaluateExam,
+    trimAnswer,
   };
 };
