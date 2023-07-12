@@ -15,13 +15,15 @@ export const ParticipantSubmitTable = React.memo(
       memoizedExams,
       handleEvaluateExam,
       evaluateExamLoading,
-      trimAnswer,
+      // trimAnswer,
     } = useExams();
 
     const examParticipantsAnswered = React.useMemo(() => {
       return memoizedExams
         ?.find((exam) => exam._id === examId)
-        ?.participants?.filter((participant) => participant.answers?.length > 0);
+        ?.participants?.filter(
+          (participant) => participant.answers?.length > 0
+        );
     }, [examId, memoizedExams]);
 
     return (
@@ -54,20 +56,21 @@ export const ParticipantSubmitTable = React.memo(
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        {data?.find(
-                          (user: any) => user._id === participant.studentId
-                        )?.name}
+                        {
+                          data?.find(
+                            (user: any) => user._id === participant.studentId
+                          )?.name
+                        }
                       </th>
                       <td
                         scope="row"
-                        className="px-6 bg-[red] overflow-y-auto overflow-x-hidden w-[400px] py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        className="px-6  overflow-y-auto overflow-x-hidden w-[400px] py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
                         <ol className="list-decimal flex flex-col h-full w-[400px] gap-3">
                           {participant.answers.map((value: any) => {
                             return (
                               <li key={value}>
-                                <h1>{trimAnswer(value.answer)}</h1>
-                                <h1 className=" break-words">{value.answer}</h1>
+                                <h1>{value.answer}</h1>
                               </li>
                             );
                           })}
@@ -130,7 +133,7 @@ export const ParticipantSubmitTable = React.memo(
                           )}
 
                         {/* dice */}
-                        {participant?.diceScore &&
+                        {participant?.diceScore ||
                           typeof participant.diceScore === "number" && (
                             <h1 className="text-xl">
                               Score dice siswa:{" "}
@@ -141,7 +144,7 @@ export const ParticipantSubmitTable = React.memo(
                                     : "text-red-700"
                                 } font-bold`}
                               >
-                                {participant.diceScore.toFixed(1)}
+                                {Math.round(participant.diceScore)}
                               </span>
                             </h1>
                           )}

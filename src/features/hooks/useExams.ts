@@ -24,7 +24,7 @@ export const useExams = () => {
   });
 
   const { data: rawExamsResults } = useQuery({
-    queryFn: Exams.getExamResults,
+    queryFn: user.role === "student" ? Exams.getExamResults : () => undefined,
     queryKey: ["exams-results"],
   });
 
@@ -121,14 +121,14 @@ export const useExams = () => {
       try {
         evaluateExamMutation({ examId, studentId, method });
       } catch (error: any) {
-        console.log("submit exam err: ", error.message);
+        console.log("evaluate exam err: ", error.message);
       }
     },
     [evaluateExamMutation]
   );
 
   const trimAnswer = React.useCallback((text: string) => {
-    return text.substring(0, 50) + "...";
+    return text.substring(0, 150) + "...";
   }, []);
 
   return {
