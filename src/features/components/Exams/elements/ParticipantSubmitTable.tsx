@@ -139,7 +139,7 @@ export const ParticipantSubmitTable = React.memo(
                           )}
 
                         {/* cosine */}
-                        {participant?.cosineScore &&
+                        {participant?.cosineScore ||
                           typeof participant.cosineScore === "number" && (
                             <>
                               <h1 className="text-xl">
@@ -158,7 +158,7 @@ export const ParticipantSubmitTable = React.memo(
                           )}
 
                         {/* dice */}
-                        {participant?.diceScore &&
+                        {participant?.diceScore ||
                           typeof participant.diceScore === "number" && (
                             <>
                               <h1 className="text-xl">
