@@ -116,7 +116,7 @@ export const ParticipantSubmitTable = React.memo(
                           )}
 
                         {/* cosine */}
-                        {participant?.cosineScore &&
+                        {participant?.cosineScore ||
                           typeof participant.cosineScore === "number" && (
                             <h1 className="text-xl">
                               Score cosine siswa:{" "}
