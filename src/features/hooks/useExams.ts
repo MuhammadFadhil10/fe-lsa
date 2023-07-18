@@ -2,6 +2,7 @@ import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   AnswerBody,
+  ColumnDataTable,
   Exam,
   ExamResult,
   Exams,
@@ -9,7 +10,7 @@ import {
   setAuthToken,
   useDataMutation,
 } from "..";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const useExams = () => {
   const user = JSON.parse(
@@ -17,6 +18,7 @@ export const useExams = () => {
   ) as UserPayload;
 
   const navigate = useNavigate();
+  const { examId } = useParams();
 
   const { data: rawExams } = useQuery({
     queryFn: user?.role === "student" ? Exams.getExams : Exams.getTeacherExams,
@@ -55,6 +57,12 @@ export const useExams = () => {
 
     return rawExamsResults.data?.data;
   }, [rawExamsResults]);
+
+  const examParticipantsAnswered = React.useMemo(() => {
+    return memoizedExams
+      ?.find((exam) => exam._id === examId)
+      ?.participants?.filter((participant) => participant.answers?.length > 0);
+  }, [examId, memoizedExams]);
 
   const isParticipated = React.useCallback(
     (exam: Exam) => {
@@ -139,6 +147,7 @@ export const useExams = () => {
     createExamLoading,
     submitExamLoading,
     evaluateExamLoading,
+    examParticipantsAnswered,
     handleStartExam,
     isParticipated,
     createExamMutation,

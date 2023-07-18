@@ -44,3 +44,11 @@ export interface AnswerBody {
   questionId: string;
   answer: string;
 }
+
+// data table
+export interface ColumnDataTable {
+  title: string;
+  width?: number | "half";
+  cell: (currentIndex: number) => JSX.Element[] | JSX.Element;
+  onClick?: () => void;
+}

@@ -1,159 +1,74 @@
-import { EmptyContent, User, useExams } from "@/features";
+import {
+  DataTable,
+  DisplayName,
+  EmptyContent,
+  ProfilePicture,
+  User,
+  UserPayload,
+  useExams,
+} from "@/features";
 import { useQuery } from "@tanstack/react-query";
 import * as React from "react";
-import { useParams } from "react-router-dom";
-import { Button } from "../../node";
 
 export const ParticipantSubmitTable = React.memo(
   function ParticipantSubmitTable() {
-    const { data } = useQuery({
+    const { data: students } = useQuery({
       queryFn: User.getTeachersStudents,
       queryKey: ["teacher-students"],
     });
-    const { examId } = useParams();
-    const {
-      memoizedExams,
-      handleEvaluateExam,
-      evaluateExamLoading,
-      // trimAnswer,
-    } = useExams();
-
-    const examParticipantsAnswered = React.useMemo(() => {
-      return memoizedExams
-        ?.find((exam) => exam._id === examId)
-        ?.participants?.filter(
-          (participant) => participant.answers?.length > 0
-        );
-    }, [examId, memoizedExams]);
-
-    const memoizedCurrentExam = React.useMemo(() => {
-      return memoizedExams.find((exam) => exam._id === examId);
-    }, [examId, memoizedExams]);
+    const { examParticipantsAnswered } = useExams();
 
     return (
-      <>
-        {(examParticipantsAnswered ?? []).length > 0 && (
-          <div className="relative overflow-x-auto w-full ">
-            {memoizedCurrentExam?.subject && (
-              <h1 className="text-xl mb-5">
-                Data pengisian mata pelajaran {memoizedCurrentExam.subject}
-              </h1>
-            )}
-            <table className="overflow-hidden w-full text-sm text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-left w-full bg-primary text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr className="">
-                  <th scope="col" className="px-6 py-3">
-                    Nama Murid
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Soal
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Jawaban
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Nilai Otomatis
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="w-full text-left overflow-hidden">
-                {examParticipantsAnswered?.map((participant) => {
-                  return (
-                    <tr
-                      key={participant._id}
-                      className="bg-white overflow-hidden border-b dark:bg-gray-800 dark:border-gray-700"
-                    >
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        {
-                          data?.find(
-                            (user: any) => user._id === participant.studentId
-                          )?.name
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl text-primary ">Data Pengumpulan Test</h1>
+
+        <DataTable
+          rowsCount={examParticipantsAnswered?.length ?? 1}
+          columns={[
+            {
+              title: "Nama Murid",
+              cell: (currentIndex) =>
+                examParticipantsAnswered?.map(
+                  (participant, index) =>
+                    currentIndex === index &&
+                    students && (
+                      <DisplayName
+                        name={
+                          (students as UserPayload[]).find(
+                            (student) => student._id === participant.studentId
+                          )?.name ?? ""
                         }
-                      </th>
-                      <td
-                        scope="row"
-                        className="px-6  overflow-y-auto overflow-x-hidden w-[400px] py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        <ol className="list-decimal flex flex-col h-full w-[400px] gap-3">
-                          {memoizedCurrentExam?.questions.map((value: any) => {
-                            return (
-                              <li key={value}>
-                                <h1>{value.question}</h1>
-                              </li>
-                            );
-                          })}
-                        </ol>
-                      </td>
-                      <td
-                        scope="row"
-                        className="px-6  overflow-y-auto overflow-x-hidden w-[400px] py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        <ol className="list-decimal flex flex-col h-full w-[400px] gap-3">
-                          {participant.answers.map((value: any) => {
-                            return (
-                              <li key={value}>
-                                <h1>{value.answer}</h1>
-                              </li>
-                            );
-                          })}
-                        </ol>
-                      </td>
-
-                      <td className="py-4 gap-2 w-[300px]">
-                        {/* evaluate */}
-                        {!participant?.score &&
-                          typeof participant.score !== "number" && (
-                            <>
-                              <h1 className="text-xl text-primary">
-                                Belum dinilai
-                              </h1>
-                              <Button
-                                text="Nilai"
-                                type="button"
-                                className="w-[100px]"
-                                // onClick={() =>
-                                //   examId &&
-                                //   handleEvaluateExam(
-                                //     examId,
-                                //     participant.studentId,
-                                //     "cosine"
-                                //   )
-                                // }
-                                loading={evaluateExamLoading}
-                              />
-                            </>
-                          )}
-
-                        {/* result */}
-                        {participant?.score ||
-                          (typeof participant.score === "number" && (
-                            <h1 className="text-xl">
-                              Score siswa:{" "}
-                              <span
-                                className={`${
-                                  participant.score > 60
-                                    ? "text-green-700"
-                                    : "text-red-700"
-                                } font-bold`}
-                              >
-                                {Math.round(participant.score)}
-                              </span>
-                            </h1>
-                          ))}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+                      />
+                    )
+                ) as JSX.Element[],
+              width: "half",
+              onClick: () => alert("assadds"),
+            },
+            {
+              title: "Email Murid",
+              cell: (currentIndex) =>
+                examParticipantsAnswered?.map(
+                  (participant, index) =>
+                    currentIndex === index &&
+                    students && (
+                      <div className="w-full flex items-center">
+                        <h1>
+                          {
+                            (students as UserPayload[]).find(
+                              (student) => student._id === participant.studentId
+                            )?.email
+                          }
+                        </h1>
+                      </div>
+                    )
+                ) as JSX.Element[],
+              width: "half",
+            },
+          ]}
+        />
 
         <EmptyContent dataArray={examParticipantsAnswered} />
-      </>
+      </div>
     );
   }
 );
