@@ -3,8 +3,8 @@ import * as React from "react";
 
 interface Props {
   name: string;
-  size?: string;
   height?: string;
+  size?: string;
 }
 
 export const ProfilePicture = React.memo(function ProfilePicture({
@@ -16,9 +16,11 @@ export const ProfilePicture = React.memo(function ProfilePicture({
 
   return (
     <div
-      className={`w-[${size}] h-[${size}] rounded-full bg-[#068FFF] flex items-center justify-center px-2`}
+      className={`w-[${size}] h-[${size}] rounded-full bg-[#068FFF] flex items-center justify-center`}
     >
-      <h1 className="font-bold text-xl text-white">{initial}</h1>
+      <h1 className="font-bold text-white align-center">
+        {initial.toUpperCase()}
+      </h1>
     </div>
   );
 });

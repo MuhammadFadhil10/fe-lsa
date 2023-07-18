@@ -26,16 +26,27 @@ export const ParticipantSubmitTable = React.memo(
         );
     }, [examId, memoizedExams]);
 
+    const memoizedCurrentExam = React.useMemo(() => {
+      return memoizedExams.find((exam) => exam._id === examId);
+    }, [examId, memoizedExams]);
+
     return (
       <>
         {(examParticipantsAnswered ?? []).length > 0 && (
           <div className="relative overflow-x-auto w-full ">
-            <h1 className="text-xl">Data jawaban siswa</h1>
+            {memoizedCurrentExam?.subject && (
+              <h1 className="text-xl mb-5">
+                Data pengisian mata pelajaran {memoizedCurrentExam.subject}
+              </h1>
+            )}
             <table className="overflow-hidden w-full text-sm text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-left w-full bg-primary text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr className="">
                   <th scope="col" className="px-6 py-3">
                     Nama Murid
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Soal
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Jawaban
@@ -67,6 +78,20 @@ export const ParticipantSubmitTable = React.memo(
                         className="px-6  overflow-y-auto overflow-x-hidden w-[400px] py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
                         <ol className="list-decimal flex flex-col h-full w-[400px] gap-3">
+                          {memoizedCurrentExam?.questions.map((value: any) => {
+                            return (
+                              <li key={value}>
+                                <h1>{value.question}</h1>
+                              </li>
+                            );
+                          })}
+                        </ol>
+                      </td>
+                      <td
+                        scope="row"
+                        className="px-6  overflow-y-auto overflow-x-hidden w-[400px] py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        <ol className="list-decimal flex flex-col h-full w-[400px] gap-3">
                           {participant.answers.map((value: any) => {
                             return (
                               <li key={value}>
@@ -76,78 +101,48 @@ export const ParticipantSubmitTable = React.memo(
                           })}
                         </ol>
                       </td>
+
                       <td className="py-4 gap-2 w-[300px]">
-                        {/* cosine */}
-                        {!participant?.cosineScore &&
-                          typeof participant.cosineScore !== "number" && (
-                            <Button
-                              text="Nilai dengan metode Cosine"
-                              type="button"
-                              className="w-full"
-                              onClick={() =>
-                                examId &&
-                                handleEvaluateExam(
-                                  examId,
-                                  participant.studentId,
-                                  "cosine"
-                                )
-                              }
-                              loading={evaluateExamLoading}
-                            />
+                        {/* evaluate */}
+                        {!participant?.score &&
+                          typeof participant.score !== "number" && (
+                            <>
+                              <h1 className="text-xl text-primary">
+                                Belum dinilai
+                              </h1>
+                              <Button
+                                text="Nilai"
+                                type="button"
+                                className="w-[100px]"
+                                // onClick={() =>
+                                //   examId &&
+                                //   handleEvaluateExam(
+                                //     examId,
+                                //     participant.studentId,
+                                //     "cosine"
+                                //   )
+                                // }
+                                loading={evaluateExamLoading}
+                              />
+                            </>
                           )}
 
-                        {/* dice */}
-                        {!participant?.diceScore &&
-                          typeof participant.diceScore !== "number" && (
-                            <Button
-                              text="Nilai dengan metode Dice"
-                              type="button"
-                              className="w-full"
-                              onClick={() =>
-                                examId &&
-                                handleEvaluateExam(
-                                  examId,
-                                  participant.studentId,
-                                  "dice"
-                                )
-                              }
-                              loading={evaluateExamLoading}
-                            />
-                          )}
-
-                        {/* cosine */}
-                        {participant?.cosineScore ||
-                          typeof participant.cosineScore === "number" && (
+                        {/* result */}
+                        {participant?.score ||
+                          (typeof participant.score === "number" && (
                             <h1 className="text-xl">
-                              Score cosine siswa:{" "}
+                              Score siswa:{" "}
                               <span
                                 className={`${
-                                  participant.cosineScore > 60
+                                  participant.score > 60
                                     ? "text-green-700"
                                     : "text-red-700"
                                 } font-bold`}
                               >
-                                {Math.round(participant.cosineScore)}
+                                {Math.round(participant.score)}
                               </span>
                             </h1>
-                          )}
-
-                        {/* dice */}
-                        {participant?.diceScore ||
-                          typeof participant.diceScore === "number" && (
-                            <h1 className="text-xl">
-                              Score dice siswa:{" "}
-                              <span
-                                className={`${
-                                  participant.diceScore > 60
-                                    ? "text-green-700"
-                                    : "text-red-700"
-                                } font-bold`}
-                              >
-                                {Math.round(participant.diceScore)}
-                              </span>
-                            </h1>
-                          )}
+                          ))}
                       </td>
                     </tr>
                   );
