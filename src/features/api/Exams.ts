@@ -18,7 +18,7 @@ export class Exams {
   // write
   static async createExam(body: Partial<Exam>) {
     return await Api.post("/teacher/exams", body);
-}
+  }
 
   static async startExams(examToken: string, examId: string) {
     return await Api.post(`/exam/${examId}/start`, { examToken });
@@ -28,10 +28,16 @@ export class Exams {
     return await Api.post(`/exam/${examId}/submit`, { answers });
   }
 
-  static async evaluateExam(examId: string, studentId: string, method: string) {
+  static async evaluateExam(
+    examId: string,
+    studentId: string,
+    method: string,
+    manualScore?: number
+  ) {
     try {
       return await Api.post(`/teacher/exams/${examId}/evaluate/${studentId}`, {
         method,
+        manualScore,
       });
     } catch (error: any) {
       console.log("evaluate exam err: ", error.message);

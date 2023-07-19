@@ -10,7 +10,7 @@ import {
 } from "@/features";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../node";
-import { Modal, Select } from "flowbite-react";
+import { Modal, Select, TextInput, Label } from "flowbite-react";
 
 export const ExamEvaluate = React.memo(function ExamEvaluate() {
   const { data: students } = useQuery({
@@ -19,10 +19,19 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
   });
 
   const [openModal, setOpenModal] = React.useState(false);
-  const [method, setMethod] = React.useState<"cosine" | "dice">("cosine");
+  const [method, setMethod] = React.useState<"cosine" | "dice" | "manual">(
+    "cosine"
+  );
+  const score = React.useRef<number | undefined>(undefined);
 
   const { studentId, examId } = useParams();
-  const { memoizedExams, examParticipantsAnswered } = useExams();
+
+  const {
+    memoizedExams,
+    examParticipantsAnswered,
+    handleEvaluateExam,
+    evaluateExamLoading,
+  } = useExams();
 
   const memoizedStudent = React.useMemo(() => {
     return (students as UserPayload[])?.find(
@@ -122,31 +131,105 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
 
   return (
     <div className="w-full flex flex-col gap-5  ">
-      {memoizedStudent && (
+      {/* {memoizedStudent && memoizedCurrentExam && ( */}
+      <div>
         <h1 className="text-2xl text-primary">
-          Hasil Jawaban {memoizedStudent.name}
+          Hasil Jawaban {memoizedStudent?.name}
         </h1>
-      )}
 
-      {memoizedCurrentExam && (
-        <DataTable
-          rowsCount={memoizedCurrentExam?.questions.length}
-          columns={memoizedColumns}
-        />
-      )}
+        <h1 className="flex items-center gap-2">
+          Nilai {memoizedStudent?.name}:{" "}
+          {examParticipantsAnswered?.find(
+            (p) => p.studentId === memoizedStudent?._id
+          )?.score ? (
+            <span className="text-2xl text-green-600">
+              {
+                examParticipantsAnswered?.find(
+                  (p) => p.studentId === memoizedStudent?._id
+                )?.score
+              }
+            </span>
+          ) : (
+            <span className="text-2xl text-red-600">Belum Dinilai</span>
+          )}
+        </h1>
+      </div>
+      {/* )} */}
+
+      {/* {memoizedCurrentExam && ( */}
+      <DataTable
+        rowsCount={memoizedCurrentExam?.questions.length ?? 0}
+        columns={memoizedColumns}
+      />
+      {/* )} */}
+
+      {/* {memoizedStudent && memoizedCurrentExam && ( */}
+      <Button
+        text="Nilai"
+        type="button"
+        className="w-[190px] fixed bottom-4 shadow-lg"
+        onClick={() => {
+          setOpenModal(true);
+        }}
+      />
+      {/* )} */}
       <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>
           <h1>Nilai Jawaban</h1>
         </Modal.Header>
-        <Modal.Body>
-          <h1>Metode penilaian</h1>
-          <Select
-            value={method}
-            onChange={(e) => setMethod(e.target.value as "dice" | "cosine")}
-          >
-            <option value="cosine">Cosine</option>
-            <option value="dice">Dice</option>
-          </Select>
+        <Modal.Body className="flex flex-col gap-5">
+          <div className="flex flex-col gap-3">
+            <div>
+              <h1>Metode penilaian</h1>
+              <Select
+                value={method}
+                onChange={(e) => {
+                  setMethod(e.target.value as "dice" | "cosine");
+                  score.current = undefined;
+                }}
+              >
+                <option value="cosine">Cosine</option>
+                <option value="dice">Dice</option>
+                <option value="manual">Manual</option>
+              </Select>
+            </div>
+            {method === "manual" && (
+              <div>
+                <Label htmlFor="manual-score">Nilai Manual</Label>
+                <TextInput
+                  id="manual-score"
+                  type="number"
+                  value={score.current}
+                  min="0"
+                  max="100"
+                  placeholder="100"
+                  onChange={(e) => {
+                    score.current = +e.target.value;
+                  }}
+                  autoFocus
+                />
+              </div>
+            )}
+          </div>
+
+          <Button
+            text="Submit"
+            type="button"
+            className="w-[190px]"
+            onClick={async () => {
+              examId &&
+                studentId &&
+                (await handleEvaluateExam(
+                  examId,
+                  studentId,
+                  method,
+                  score.current
+                ));
+
+              setOpenModal(false);
+            }}
+            loading={evaluateExamLoading}
+          />
         </Modal.Body>
       </Modal>
     </div>

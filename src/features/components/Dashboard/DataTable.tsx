@@ -58,6 +58,7 @@ export const DataTable = React.memo(function DataTable({
                     justifyContent: col.bodyJustify ?? "start",
                   }}
                   onClick={() => col.onClick && col.onClick(rowIndex)}
+                  className={`${col.onClick && "hover:bg-gray-300"}`}
                 >
                   {col.cell(rowIndex)}
                 </Cell>

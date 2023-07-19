@@ -28,7 +28,8 @@ export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
         return await Exams.evaluateExam(
           params.examId,
           params.studentId,
-          params.method
+          params.method,
+          params.manualScore
         );
       }
 
