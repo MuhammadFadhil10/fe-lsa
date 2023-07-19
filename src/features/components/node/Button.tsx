@@ -1,5 +1,6 @@
 import * as React from "react";
 import { LoadingSpinner } from "..";
+import { Button as FButton } from "flowbite-react";
 
 interface Props {
   type?: "button" | "submit";
@@ -25,10 +26,10 @@ export const Button = React.memo(function Button({
   disabled = false,
 }: Props) {
   return (
-    <button
+    <FButton
       id={id}
       type={type}
-      className={` flex justify-center mt-5  ${
+      className={` flex justify-center  ${
         variant === "fill"
           ? disabled
             ? "bg-gray-500 text-black"
@@ -46,13 +47,13 @@ export const Button = React.memo(function Button({
             : "border-2 border-primary bg-transparent text-primary"
           : ""
       }
-      font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none dark:focus:ring-blue-800 
+      font-medium rounded-lg text-sm px-2 focus:outline-none dark:focus:ring-blue-800 
         ${className}
       `}
       onClick={onClick}
       disabled={loading || disabled}
     >
       {!loading ? text : <LoadingSpinner />}
-    </button>
+    </FButton>
   );
 });

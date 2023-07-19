@@ -1,5 +1,11 @@
 import * as React from "react";
-import { EmptyContent, useTeacher } from "..";
+import {
+  DataTable,
+  DisplayName,
+  EmptyContent,
+  UserPayload,
+  useTeacher,
+} from "..";
 import { Button } from "./node";
 
 export const TeacherStudents = React.memo(function TeacherStudents() {
@@ -13,8 +19,8 @@ export const TeacherStudents = React.memo(function TeacherStudents() {
   const [studentId, setStudentId] = React.useState("");
 
   return (
-    <>
-      {memoizedAllStudents?.length > 0 && (
+    <div className="w-full">
+      {/* {memoizedAllStudents?.length > 0 && (
         <div className="w-full">
           <table className=" overflow-hidden w-full text-sm text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-left w-full bg-primary text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -89,9 +95,89 @@ export const TeacherStudents = React.memo(function TeacherStudents() {
             </tbody>
           </table>
         </div>
+      )} */}
+
+      {memoizedAllStudents.length > 0 && (
+        <div className="w-full flex flex-col gap-5">
+          <h1 className="text-2xl text-primary">Tambah Murid</h1>
+          <DataTable
+            rowsCount={memoizedAllStudents.length}
+            columns={[
+              {
+                title: "Nama Murid",
+                cell: (currentIndex) => {
+                  return (memoizedAllStudents as UserPayload[]).map(
+                    (student, index) =>
+                      currentIndex === index ? (
+                        <DisplayName key={index} name={student.name} />
+                      ) : (
+                        <></>
+                      )
+                  );
+                },
+                width: 250,
+              },
+              {
+                title: "Email Murid",
+                cell: (currentIndex) => {
+                  return (memoizedAllStudents as UserPayload[]).map(
+                    (student, index) =>
+                      currentIndex === index ? <h1>{student.email}</h1> : <></>
+                  );
+                },
+                width: 250,
+              },
+              {
+                title: "Tambah Murid",
+                cell: (currentIndex) => {
+                  return (memoizedAllStudents as UserPayload[]).map(
+                    (student, index) =>
+                      currentIndex === index ? (
+                        <Button
+                          id={student._id}
+                          type="button"
+                          text={
+                            memoizedTeacherStudentsIds.includes(student._id)
+                              ? "Buang"
+                              : "Tambah"
+                          }
+                          bgColor={
+                            memoizedTeacherStudentsIds.includes(student._id)
+                              ? "red"
+                              : undefined
+                          }
+                          variant={
+                            memoizedTeacherStudentsIds.includes(student._id)
+                              ? "outlined"
+                              : "fill"
+                          }
+                          loading={
+                            toggleAddStudentLoading && studentId === student._id
+                          }
+                          onClick={async (e) => {
+                            setStudentId(e.currentTarget.id);
+
+                            await handleToggleAddStudent([student._id]);
+
+                            setStudentId("");
+                          }}
+                          className="w-[150px]"
+                        />
+                      ) : (
+                        <></>
+                      )
+                  );
+                },
+                width: 200,
+                bodyJustify: "center",
+                titleJustify: "center",
+              },
+            ]}
+          />
+        </div>
       )}
 
       <EmptyContent dataArray={memoizedAllStudents} />
-    </>
+    </div>
   );
 });

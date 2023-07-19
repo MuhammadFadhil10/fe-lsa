@@ -139,6 +139,8 @@ export const useExams = () => {
     return text.substring(0, 150) + "...";
   }, []);
 
+  // data table
+
   return {
     user,
     memoizedExams,

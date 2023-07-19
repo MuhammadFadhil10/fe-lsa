@@ -2,13 +2,13 @@ import {
   DataTable,
   DisplayName,
   EmptyContent,
-  ProfilePicture,
   User,
   UserPayload,
   useExams,
 } from "@/features";
 import { useQuery } from "@tanstack/react-query";
 import * as React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const ParticipantSubmitTable = React.memo(
   function ParticipantSubmitTable() {
@@ -16,7 +16,10 @@ export const ParticipantSubmitTable = React.memo(
       queryFn: User.getTeachersStudents,
       queryKey: ["teacher-students"],
     });
+    
     const { examParticipantsAnswered } = useExams();
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     return (
       <div className="flex flex-col gap-5">
@@ -41,8 +44,13 @@ export const ParticipantSubmitTable = React.memo(
                       />
                     )
                 ) as JSX.Element[],
-              width: "half",
-              onClick: () => alert("assadds"),
+              width: 500,
+              onClick: (currentIndex) =>
+                navigate(
+                  `${pathname}/evaluate/${
+                    (students as UserPayload[])[currentIndex]._id
+                  }`
+                ),
             },
             {
               title: "Email Murid",
@@ -62,7 +70,7 @@ export const ParticipantSubmitTable = React.memo(
                       </div>
                     )
                 ) as JSX.Element[],
-              width: "half",
+              width: 500,
             },
           ]}
         />

@@ -12,38 +12,58 @@ export const DataTable = React.memo(function DataTable({
   rowsCount,
   columns,
 }: Props) {
-  //   const customCell = (rowIndex: number) => {
-  //     return <Cell></Cell>;
-  //   };
+  const colWidth = React.useMemo(() => {
+    return columns.map((col) => col.width);
+  }, [columns]);
+
+  const tableWidth = React.useMemo(() => {
+    const width = colWidth.reduce((prev, cur) => (prev ?? 0) + (cur ?? 0));
+
+    return (width ?? 0) >= 1180 ? 1180 : width;
+  }, [colWidth]);
 
   return (
     <>
       <Table
         rowHeight={60}
         rowsCount={rowsCount}
-        width={1180}
+        width={tableWidth as number}
         maxHeight={700}
         headerHeight={50}
       >
-        {columns.map((col) => {
+        {columns.map((col, index) => {
           return (
             <Column
-              header={<Cell>{col.title}</Cell>}
-              cell={({ rowIndex }) => (
+              key={index}
+              header={
                 <Cell
                   style={{
-                    width: "100%",
-                    cursor: col.onClick ? "pointer" : "default",
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: col.titleJustify ?? "start",
                   }}
-                  onClick={col.onClick && col.onClick}
+                >
+                  {col.title}
+                </Cell>
+              }
+              cell={({ rowIndex }) => (
+                <Cell
+                  key={rowIndex}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    cursor: col.onClick ? "pointer" : "default",
+                    display: "flex",
+                    alignItems: col.bodyAlign ?? "start",
+                    justifyContent: col.bodyJustify ?? "start",
+                  }}
+                  onClick={() => col.onClick && col.onClick(rowIndex)}
                 >
                   {col.cell(rowIndex)}
                 </Cell>
               )}
-              width={col.width === "half" ? 1180 / 2 : (col.width as number)}
-              fixed
+              width={col.width ? col.width : 1180 - (tableWidth as number)}
+              fixed={col.fixed}
             />
           );
         })}

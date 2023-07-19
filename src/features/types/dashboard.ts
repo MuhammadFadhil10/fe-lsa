@@ -43,12 +43,17 @@ export interface ExamResult {
 export interface AnswerBody {
   questionId: string;
   answer: string;
+  accuracy?: number;
 }
 
 // data table
 export interface ColumnDataTable {
   title: string;
-  width?: number | "half";
+  titleJustify?: "start" | "center";
+  bodyJustify?: "start" | "center";
+  bodyAlign?: "start" | "center";
+  width?: number;
+  fixed?: boolean;
   cell: (currentIndex: number) => JSX.Element[] | JSX.Element;
-  onClick?: () => void;
+  onClick?: (currentIndex: number) => void;
 }

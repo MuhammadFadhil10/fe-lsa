@@ -1,10 +1,154 @@
 import * as React from "react";
-import { ParticipantSubmitTable } from "./elements/ParticipantSubmitTable";
+import { useParams } from "react-router-dom";
+import {
+  AnswerBody,
+  ColumnDataTable,
+  DataTable,
+  User,
+  UserPayload,
+  useExams,
+} from "@/features";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "../node";
+import { Modal, Select } from "flowbite-react";
 
 export const ExamEvaluate = React.memo(function ExamEvaluate() {
+  const { data: students } = useQuery({
+    queryFn: User.getTeachersStudents,
+    queryKey: ["teacher-students"],
+  });
+
+  const [openModal, setOpenModal] = React.useState(false);
+  const [method, setMethod] = React.useState<"cosine" | "dice">("cosine");
+
+  const { studentId, examId } = useParams();
+  const { memoizedExams, examParticipantsAnswered } = useExams();
+
+  const memoizedStudent = React.useMemo(() => {
+    return (students as UserPayload[])?.find(
+      (student) => student._id === studentId
+    );
+  }, [studentId, students]);
+
+  const memoizedCurrentExam = React.useMemo(() => {
+    return memoizedExams?.find((exam) => exam._id === examId);
+  }, [examId, memoizedExams]);
+
+  const memoizedStudentAnswers: ({ _id: string } & AnswerBody)[] =
+    React.useMemo(() => {
+      return (examParticipantsAnswered?.find(
+        (participant) => participant.studentId === memoizedStudent?._id
+      )?.answers ?? {}) as ({ _id: string } & AnswerBody)[];
+    }, [examParticipantsAnswered, memoizedStudent?._id]);
+
+  const memoizedColumns: ColumnDataTable[] = React.useMemo(() => {
+    return [
+      {
+        title: "No",
+        width: 50,
+        cell: (currentIndex) => <h1 className="text-xl">{currentIndex + 1}</h1>,
+      },
+      {
+        title: "Pertanyaan",
+        width: 250,
+        cell: (currentIndex) =>
+          memoizedCurrentExam?.questions.map((question, index) => {
+            if (index === currentIndex) {
+              return <h1>{question.question}</h1>;
+            }
+          }) as JSX.Element[],
+      },
+      {
+        title: "Kunci Jawaban",
+        width: 250,
+        cell: (currentIndex) =>
+          memoizedCurrentExam?.questions.map((question, index) => {
+            if (index === currentIndex) {
+              return <h1>{question.answerKey}</h1>;
+            }
+          }) as JSX.Element[],
+      },
+      {
+        title: "Jawaban Murid",
+        width: 250,
+        cell: (currentIndex) =>
+          memoizedStudentAnswers?.map((answer, index) => {
+            if (index === currentIndex) {
+              return <h1>{answer.answer}</h1>;
+            }
+          }) as JSX.Element[],
+      },
+      {
+        title: "Akurasi Kemiripan",
+        width: 200,
+        titleJustify: "center",
+        bodyJustify: "center",
+        bodyAlign: "center",
+        cell: (currentIndex) =>
+          memoizedStudentAnswers?.map((answer, index) => {
+            if (index === currentIndex) {
+              return (
+                <h1
+                  className={`${
+                    answer.accuracy ? "text-primary" : "text-red-600"
+                  } font-bold`}
+                >
+                  {answer.accuracy ?? "Belum dihitung"}
+                </h1>
+              );
+            }
+          }) as JSX.Element[],
+      },
+      // score per question
+      // {
+      //   title: "Nilai",
+      //   width: 200,
+      //   titleJustify: "center",
+      //   bodyJustify: "center",
+      //   bodyAlign: "center",
+      //   cell: () => (
+      //     <Button
+      //       text="Nilai akurasi otomatis"
+      //       type="button"
+      //       className="w-[190px]"
+      //       onClick={() => {
+      //         setOpenModal(true);
+      //       }}
+      //     />
+      //   ),
+      // },
+    ];
+  }, [memoizedCurrentExam?.questions, memoizedStudentAnswers]);
+
   return (
-    <div className=" w-full">
-      <ParticipantSubmitTable />
+    <div className="w-full flex flex-col gap-5  ">
+      {memoizedStudent && (
+        <h1 className="text-2xl text-primary">
+          Hasil Jawaban {memoizedStudent.name}
+        </h1>
+      )}
+
+      {memoizedCurrentExam && (
+        <DataTable
+          rowsCount={memoizedCurrentExam?.questions.length}
+          columns={memoizedColumns}
+        />
+      )}
+      <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header>
+          <h1>Nilai Jawaban</h1>
+        </Modal.Header>
+        <Modal.Body>
+          <h1>Metode penilaian</h1>
+          <Select
+            value={method}
+            onChange={(e) => setMethod(e.target.value as "dice" | "cosine")}
+          >
+            <option value="cosine">Cosine</option>
+            <option value="dice">Dice</option>
+          </Select>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 });
