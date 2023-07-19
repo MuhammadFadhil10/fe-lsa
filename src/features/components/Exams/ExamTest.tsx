@@ -73,7 +73,7 @@ export const ExamTest = React.forwardRef(function ExamTest(
           examId
         );
       }}
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-5 "
     >
       {questions?.map((question, index) => (
         <div className="w-full flex flex-col gap-3">

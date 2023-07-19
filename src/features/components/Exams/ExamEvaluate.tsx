@@ -92,7 +92,6 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
         width: 200,
         titleJustify: "center",
         bodyJustify: "center",
-        bodyAlign: "center",
         cell: (currentIndex) =>
           memoizedStudentAnswers?.map((answer, index) => {
             if (index === currentIndex) {
@@ -158,6 +157,7 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
 
       {/* {memoizedCurrentExam && ( */}
       <DataTable
+        rowHeight={200}
         rowsCount={memoizedCurrentExam?.questions.length ?? 0}
         columns={memoizedColumns}
       />
@@ -165,7 +165,13 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
 
       {/* {memoizedStudent && memoizedCurrentExam && ( */}
       <Button
-        text="Nilai"
+        text={
+          examParticipantsAnswered?.find(
+            (p) => p.studentId === memoizedStudent?._id
+          )?.score
+            ? "Edit Nilai"
+            : "Nilai"
+        }
         type="button"
         className="w-[190px] fixed bottom-4 shadow-lg"
         onClick={() => {
@@ -175,7 +181,7 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
       {/* )} */}
       <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>
-          <h1>Nilai Jawaban</h1>
+          <h1>Nilai</h1>
         </Modal.Header>
         <Modal.Body className="flex flex-col gap-5">
           <div className="flex flex-col gap-3">
@@ -213,7 +219,13 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
           </div>
 
           <Button
-            text="Submit"
+            text={
+              examParticipantsAnswered?.find(
+                (p) => p.studentId === memoizedStudent?._id
+              )?.score
+                ? "Edit"
+                : "Submit"
+            }
             type="button"
             className="w-[190px]"
             onClick={async () => {

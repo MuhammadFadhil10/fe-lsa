@@ -4,11 +4,13 @@ import "fixed-data-table-2/dist/fixed-data-table.css";
 import { ColumnDataTable } from "@/features";
 
 interface Props {
+  rowHeight?: number;
   rowsCount: number;
   columns: ColumnDataTable[];
 }
 
 export const DataTable = React.memo(function DataTable({
+  rowHeight = 60,
   rowsCount,
   columns,
 }: Props) {
@@ -25,10 +27,11 @@ export const DataTable = React.memo(function DataTable({
   return (
     <>
       <Table
-        rowHeight={60}
+        rowHeight={rowHeight}
+        // rowHeightGetter={(index) => index}
         rowsCount={rowsCount}
         width={tableWidth as number}
-        maxHeight={700}
+        maxHeight={500}
         headerHeight={50}
       >
         {columns.map((col, index) => {
@@ -52,6 +55,8 @@ export const DataTable = React.memo(function DataTable({
                   style={{
                     width: "100%",
                     height: "100%",
+                    overflowY: "auto",
+                    overflowX: "hidden",
                     cursor: col.onClick ? "pointer" : "default",
                     display: "flex",
                     alignItems: col.bodyAlign ?? "start",
