@@ -2,7 +2,6 @@ import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   AnswerBody,
-  ColumnDataTable,
   Exam,
   ExamResult,
   Exams,
