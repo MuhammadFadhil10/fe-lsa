@@ -33,6 +33,12 @@ export const useDataMutation = (event: MutationEvent, queryKey?: unknown[]) => {
         );
       }
 
+      case "SUBMIT_SCORE_EXAM": {
+        const params = body as any;
+
+        return await Exams.submitScore(params.examId, params.studentId);
+      }
+
       case "TOGGLE_ADD_STUDENT":
         return await User.toggleAddTeacherStudent(body as string[]);
     }

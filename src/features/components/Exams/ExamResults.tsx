@@ -74,12 +74,14 @@ export const ExamResults = React.memo(function ExamResults() {
                   index === currentIndex && (
                     <h1
                       className={`text-2xl ${
-                        (result.score ?? 0) >= 60
+                        result?.isEvaluated && (result.score ?? 0) >= 60
                           ? "text-green-700"
                           : "text-red-700"
                       }`}
                     >
-                      {result.score ?? "Belum Dinilai"}
+                      {result.score && result?.isEvaluated
+                        ? result.score
+                        : "Belum Dinilai"}
                     </h1>
                   )
               )}

@@ -4,13 +4,14 @@ import {
   AnswerBody,
   ColumnDataTable,
   DataTable,
+  Participan,
   User,
   UserPayload,
   useExams,
 } from "@/features";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../node";
-import { Modal, Select, TextInput, Label } from "flowbite-react";
+import { Alert, Modal, Select, TextInput, Label } from "flowbite-react";
 
 export const ExamEvaluate = React.memo(function ExamEvaluate() {
   const { data: students } = useQuery({
@@ -30,6 +31,8 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
     memoizedExams,
     examParticipantsAnswered,
     handleEvaluateExam,
+    handleSubmitScoreExam,
+    submitScoreLoading,
     evaluateExamLoading,
   } = useExams();
 
@@ -50,6 +53,12 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
       )?.answers ?? {}) as ({ _id: string } & AnswerBody)[];
     }, [examParticipantsAnswered, memoizedStudent?._id]);
 
+  const memoizedStudentEvaluated: Participan | undefined = React.useMemo(() => {
+    return examParticipantsAnswered?.find(
+      (participant) => participant.studentId === memoizedStudent?._id
+    );
+  }, [examParticipantsAnswered, memoizedStudent?._id]);
+
   const memoizedColumns: ColumnDataTable[] = React.useMemo(() => {
     return [
       {
@@ -63,7 +72,7 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
         cell: (currentIndex) =>
           memoizedCurrentExam?.questions.map((question, index) => {
             if (index === currentIndex) {
-              return <h1>{question.question}</h1>;
+              return <h1>{question.question} </h1>;
             }
           }) as JSX.Element[],
       },
@@ -129,31 +138,75 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
   }, [memoizedCurrentExam?.questions, memoizedStudentAnswers]);
 
   return (
-    <div className="w-full flex flex-col gap-5  ">
+    <div className="w-full h-[90vh] flex flex-col gap-5 overflow-auto ">
       {/* {memoizedStudent && memoizedCurrentExam && ( */}
-      <div>
-        <h1 className="text-2xl text-primary">
-          Hasil Jawaban {memoizedStudent?.name}
-        </h1>
+      <div className="flex flex-col gap-2">
+        <div>
+          <h1 className="text-2xl text-primary">
+            Hasil Jawaban {memoizedStudent?.name}
+          </h1>
 
-        <h1 className="flex items-center gap-2">
-          Nilai {memoizedStudent?.name}:{" "}
-          {examParticipantsAnswered?.find(
-            (p) => p.studentId === memoizedStudent?._id
-          )?.score ? (
-            <span className="text-2xl text-green-600">
-              {
-                examParticipantsAnswered?.find(
+          <h1 className="flex items-center gap-2">
+            Nilai {memoizedStudent?.name}:{" "}
+            {examParticipantsAnswered?.find(
+              (p) => p.studentId === memoizedStudent?._id
+            )?.score ? (
+              <span className="text-2xl text-green-600">
+                {examParticipantsAnswered?.find(
                   (p) => p.studentId === memoizedStudent?._id
-                )?.score
-              }
-            </span>
-          ) : (
-            <span className="text-2xl text-red-600">Belum Dinilai</span>
-          )}
-        </h1>
+                )?.score +
+                  `${
+                    memoizedStudentEvaluated?.score &&
+                    !memoizedStudentEvaluated?.isEvaluated
+                      ? " (Belum Disubmit)"
+                      : ""
+                  }`}
+              </span>
+            ) : (
+              <span className="text-2xl text-red-600">Belum Dinilai</span>
+            )}
+          </h1>
+        </div>
+
+        <div className="flex gap-5 ">
+          <Button
+            text={
+              examParticipantsAnswered?.find(
+                (p) => p.studentId === memoizedStudent?._id
+              )?.score
+                ? "Edit Nilai"
+                : "Nilai"
+            }
+            type="button"
+            className="w-[190px]  shadow-lg"
+            onClick={() => {
+              setOpenModal(true);
+            }}
+          />
+          {memoizedStudentEvaluated?.score &&
+            !memoizedStudentEvaluated?.isEvaluated && (
+              <Button
+                text="Submit Nilai"
+                type="button"
+                className="w-[190px]  shadow-lg"
+                onClick={() =>
+                  examId &&
+                  studentId &&
+                  handleSubmitScoreExam(examId as string, studentId as string)
+                }
+                loading={submitScoreLoading}
+              />
+            )}
+        </div>
       </div>
       {/* )} */}
+
+      {/* {memoizedStudentEvaluated?.score &&
+        !memoizedStudentEvaluated?.isEvaluated && (
+          <Alert color="failure" className="w-[400px] items-center">
+            Nilai Belum Disubmit!
+          </Alert>
+        )} */}
 
       {/* {memoizedCurrentExam && ( */}
       <DataTable
@@ -164,20 +217,36 @@ export const ExamEvaluate = React.memo(function ExamEvaluate() {
       {/* )} */}
 
       {/* {memoizedStudent && memoizedCurrentExam && ( */}
-      <Button
-        text={
-          examParticipantsAnswered?.find(
-            (p) => p.studentId === memoizedStudent?._id
-          )?.score
-            ? "Edit Nilai"
-            : "Nilai"
-        }
-        type="button"
-        className="w-[190px] fixed bottom-4 shadow-lg"
-        onClick={() => {
-          setOpenModal(true);
-        }}
-      />
+      {/* <div className="flex gap-5">
+        <Button
+          text={
+            examParticipantsAnswered?.find(
+              (p) => p.studentId === memoizedStudent?._id
+            )?.score
+              ? "Edit Nilai"
+              : "Nilai"
+          }
+          type="button"
+          className="w-[190px]  shadow-lg"
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        />
+        <Button
+          text={
+            examParticipantsAnswered?.find(
+              (p) => p.studentId === memoizedStudent?._id
+            )?.score
+              ? "Edit Nilai"
+              : "Nilai"
+          }
+          type="button"
+          className="w-[190px]  shadow-lg"
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        />
+      </div> */}
       {/* )} */}
       <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>

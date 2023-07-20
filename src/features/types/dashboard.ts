@@ -16,6 +16,7 @@ export type Participan = {
   examToken: string;
   answers: string[];
   score?: number;
+  isEvaluated?: boolean;
 };
 
 export interface Exam {
@@ -38,6 +39,7 @@ export interface ExamResult {
     question: string;
     answer: string;
   }[];
+  isEvaluated?: boolean;
 }
 
 export interface AnswerBody {

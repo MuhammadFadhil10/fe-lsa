@@ -42,6 +42,9 @@ export const useExams = () => {
   const { mutateAsync: evaluateExamMutation, isLoading: evaluateExamLoading } =
     useDataMutation("EVALUATE_EXAM", ["teacher-exams"]);
 
+  const { mutateAsync: submitScoreMutation, isLoading: submitScoreLoading } =
+    useDataMutation("SUBMIT_SCORE_EXAM", ["teacher-exams"]);
+
   const [startExamError, setStartExamError] = React.useState("");
 
   // memo
@@ -139,6 +142,17 @@ export const useExams = () => {
     [evaluateExamMutation]
   );
 
+  const handleSubmitScoreExam = React.useCallback(
+    async (examId: string, studentId: string) => {
+      try {
+        await submitScoreMutation({ examId, studentId });
+      } catch (error: any) {
+        console.log("submit score exam err: ", error.message);
+      }
+    },
+    [submitScoreMutation]
+  );
+
   const trimAnswer = React.useCallback((text: string) => {
     return text.substring(0, 150) + "...";
   }, []);
@@ -161,5 +175,7 @@ export const useExams = () => {
     handleSubmitExam,
     handleEvaluateExam,
     trimAnswer,
+    handleSubmitScoreExam,
+    submitScoreLoading,
   };
 };

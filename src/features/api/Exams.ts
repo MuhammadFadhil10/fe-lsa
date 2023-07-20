@@ -44,4 +44,15 @@ export class Exams {
       throw Error(error.message);
     }
   }
+
+  static async submitScore(examId: string, studentId: string) {
+    try {
+      return await Api.post(
+        `/teacher/exams/submit-score/${examId}/${studentId}`
+      );
+    } catch (error: any) {
+      console.log("submit score exam err: ", error.message);
+      throw Error(error.message);
+    }
+  }
 }
